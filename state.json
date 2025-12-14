@@ -27,51 +27,51 @@
       "name": "Iron Pearl",
       "owner": "imperial_core",
       "type": "City",
-      "income": 0,
-      "buildings": ["capital"]
+      "income": 500,
+      "buildings": ["Imperial Throne"]
     },
 
     "southport": {
       "name": "Southport",
       "owner": "valley_manors",
       "type": "City",
-      "income": 0,
-      "buildings": ["capital"]
+      "income": 200,
+      "buildings": ["Urban Sprawl"]
     },
     "valley_rock": {
       "name": "Valley Rock",
       "owner": "valley_manors",
       "type": "City",
       "income": 0,
-      "buildings": []
+      "buildings": ["Urban Sprawl"]
     },
     "southern_farmlands": {
       "name": "Southern Farmlands",
       "owner": "valley_manors",
       "type": "Town",
-      "income": 0,
-      "buildings": []
+      "income": 50,
+      "buildings": ["Wheat Farms"]
     },
     "greenshore_docks": {
       "name": "Greenshore Docks",
       "owner": "valley_manors",
       "type": "Town",
-      "income": 0,
-      "buildings": []
+      "income": 150,
+      "buildings": ["Dockyard"]
     },
     "fahry_pass": {
       "name": "Fahry Pass",
       "owner": "valley_manors",
       "type": "Keep",
-      "income": 0,
-      "buildings": []
+      "income": 100,
+      "buildings": ["Fortified Keep"]
     },
     "zbabs_hold": {
       "name": "Zbab's Hold",
       "owner": "valley_manors",
       "type": "Keep",
-      "income": 0,
-      "buildings": []
+      "income": 100,
+      "buildings": ["Fortified Keep"]
     }
   },
 
