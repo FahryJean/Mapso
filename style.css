@@ -1,114 +1,111 @@
-/* ===============================
-   FONT: IM FELL ENGLISH
-   =============================== */
+/* ---------------- FONT ---------------- */
 @import url("https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap");
 
-/* ===============================
-   GLOBAL
-   =============================== */
+/* ---------------- BASE ---------------- */
 body {
   margin: 0;
-  font-family: "IM Fell English", Georgia, "Times New Roman", serif;
+  font-family: "IM Fell English", Georgia, serif;
 
-  /* PAGE BACKGROUND (light parchment brown) */
-  background: #e7dcc8;
-
-  color: #1f1f1f;
+  /* parchment / neutral background behind everything */
+  background: #ede6d6;
+  color: #1f1a14;
 }
 
-/* ===============================
-   HEADER
-   =============================== */
+/* ---------------- HEADER ---------------- */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-
   padding: 16px 20px;
 
-  /* HEADER BACKGROUND (light chestnut) */
-  background: #d9c4a0;
+  /* wood base colour */
+  background-color: #c8a77a;
 
-  border-bottom: 2px solid #3a2f1d;
+  /* vertical wood grain */
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.06) 0px,
+      rgba(255,255,255,0.06) 2px,
+      rgba(0,0,0,0.05) 4px,
+      rgba(0,0,0,0.05) 6px
+    );
+
+  border-bottom: 3px solid #5a3e1b;
 }
 
 .title {
   font-size: 28px;
-  font-weight: bold;
+  font-weight: normal;
   letter-spacing: 0.5px;
 }
 
 .subtitle {
-  font-size: 15px;
-  color: #3a2f1d;
+  font-size: 14px;
+  opacity: 0.8;
 }
 
-/* ===============================
-   MAIN LAYOUT
-   =============================== */
+/* ---------------- LAYOUT ---------------- */
 .layout {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 340px 1fr;
   gap: 14px;
   padding: 14px;
 }
 
-/* ===============================
-   LEFT PANEL (PLAYERS / NOTES)
-   =============================== */
+/* ---------------- LEFT PANEL (WOOD) ---------------- */
 .panel {
-  background: #e3d0ad; /* LIGHT BROWN PANEL */
+  background-color: #d2b48c;
 
-  border: 2px solid #3a2f1d;
+  /* wood grain */
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.05) 0px,
+      rgba(255,255,255,0.05) 3px,
+      rgba(0,0,0,0.06) 6px,
+      rgba(0,0,0,0.06) 9px
+    );
+
+  border: 3px solid #5a3e1b;
   border-radius: 12px;
 
   padding: 14px;
-
   height: calc(100vh - 110px);
   overflow-y: auto;
 }
 
 .panel h2 {
-  margin-top: 0;
-  margin-bottom: 8px;
+  margin-top: 10px;
+  margin-bottom: 6px;
   font-size: 18px;
-  border-bottom: 1px solid #3a2f1d;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
   padding-bottom: 4px;
 }
 
-/* Player entries (script.js already styles borders) */
-.panel .player {
-  margin-bottom: 18px; /* EXTRA SPACE BETWEEN FACTIONS */
+/* ---------------- PLAYER ENTRIES ---------------- */
+.player {
+  margin-bottom: 18px;
+  padding-left: 8px;
 }
 
-/* ===============================
-   MAP CONTAINER
-   =============================== */
+.player b {
+  font-size: 17px;
+}
+
+/* ---------------- MAP WRAP ---------------- */
 .mapwrap {
-  background: #ffffff;
+  background: #f7f2e7; /* parchment-like */
 
-  border: 2px solid #3a2f1d;
+  border: 3px solid #5a3e1b;
   border-radius: 12px;
-
   overflow: hidden;
+
   height: calc(100vh - 110px);
 }
 
+/* ---------------- MAP ---------------- */
 #map {
   width: 100%;
   height: 100%;
-}
-
-/* ===============================
-   LEAFLET POPUPS (OPTIONAL POLISH)
-   =============================== */
-.leaflet-popup-content-wrapper {
-  font-family: "IM Fell English", serif;
-  background: #f9f6ef;
-  color: #1f1f1f;
-  border-radius: 8px;
-}
-
-.leaflet-popup-tip {
-  background: #f9f6ef;
 }
