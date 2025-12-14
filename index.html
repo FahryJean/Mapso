@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mapso Campaign Map</title>
 
-  <!-- Leaflet CSS -->
+  <!-- Leaflet CSS (NO integrity; avoids SRI mismatch issues) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Your styles -->
@@ -26,6 +26,11 @@
       <h2>Players</h2>
       <div id="players" class="list"></div>
 
+      <h2>Status</h2>
+      <pre id="status" style="white-space:pre-wrap; background:#fff; border:1px solid #333; padding:8px; border-radius:8px;">
+Loading…
+      </pre>
+
       <h2>Notes</h2>
       <p>Edit <code>state.json</code> each turn, then commit.</p>
     </section>
@@ -35,10 +40,10 @@
     </section>
   </main>
 
-  <!-- Leaflet JS (must be before script.js) -->
+  <!-- Leaflet JS (NO integrity; avoids SRI mismatch issues) -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Your script -->
-  <script src="script.js?v=1"></script>
+  <!-- Your script (cache-bust with ?v=2) -->
+  <script src="script.js?v=2"></script>
 </body>
 </html>
