@@ -1,0 +1,44 @@
+{
+  "turn": 1,
+
+  "map": {
+    "image": "map.png",
+    "width": 3000,
+    "height": 2000
+  },
+
+  "players": {
+    "england": {
+      "name": "Kingdom of England",
+      "gold": 1200,
+      "capital": "london",
+      "faction": "England"
+    },
+    "france": {
+      "name": "Kingdom of France",
+      "gold": 950,
+      "capital": "paris",
+      "faction": "France"
+    }
+  },
+
+  "provinces": {
+    "london": {
+      "name": "London",
+      "owner": "england",
+      "income": 300,
+      "buildings": ["capital", "market", "barracks"]
+    },
+    "paris": {
+      "name": "Paris",
+      "owner": "france",
+      "income": 280,
+      "buildings": ["capital", "walls"]
+    }
+  },
+
+  "markers": [
+    { "id": "london", "provinceId": "london", "x": 740, "y": 620 },
+    { "id": "paris", "provinceId": "paris", "x": 980, "y": 910 }
+  ]
+}
