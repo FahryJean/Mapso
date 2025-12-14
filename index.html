@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Medieval Campaign Map</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="header">
+    <div>
+      <div class="title">Medieval Campaign</div>
+      <div class="subtitle">Turn <span id="turn">?</span></div>
+    </div>
+    <div class="hint">Click a marker for details.</div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>Players</h2>
+      <div id="players" class="list"></div>
+
+      <h2>Notes</h2>
+      <p>Edit <code>state.json</code> each turn, then commit.</p>
+    </section>
+
+    <section class="mapwrap">
+      <div id="map"></div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@
