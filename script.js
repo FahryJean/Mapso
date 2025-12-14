@@ -4,7 +4,7 @@ function setTurn(value) {
 }
 
 function escapeHtml(s) {
-  return String(s)
+  return String(s ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -13,81 +13,113 @@ function escapeHtml(s) {
 }
 
 fetch("state.json", { cache: "no-store" })
-  .then(r => {
+  .then((r) => {
     if (!r.ok) throw new Error("Failed to load state.json");
     return r.json();
   })
-  .then(state => {
+  .then((state) => {
     setTurn(state.turn ?? "?");
 
     /* ---------------- PLAYERS LIST ---------------- */
     const playersDiv = document.getElementById("players");
+    if (!playersDiv) throw new Error("Missing <div id='players'> in index.html");
     playersDiv.innerHTML = "";
 
-    for (const [key, p] of Object.entries(state.players)) {
+    const players = state.players || {};
+    const provinces = state.provinces || {};
+
+    for (const [key, p] of Object.entries(players)) {
+      const colour = p.colour || "#000000";
+      const capitalName = provinces[p.capital]?.name ?? p.capital ?? "-";
+
       const div = document.createElement("div");
-      div.style.borderLeft = `8px solid ${p.colour}`;
-      div.style.paddingLeft = "8px";
-      div.style.marginBottom = "12px";
+      div.style.borderLeft = `10px solid ${colour}`;
+      div.style.padding = "6px 8px";
+      div.style.marginBottom = "20px"; // <-- extra space between players
+      div.style.background = "rgba(255,255,255,0.35)";
+      div.style.borderRadius = "8px";
 
       div.innerHTML = `
-        <b>${escapeHtml(p.name)}</b><br>
-        Gold: ${p.gold}<br>
-        Capital: ${escapeHtml(
-          state.provinces[p.capital]?.name ?? "-"
-        )}
+        <b>${escapeHtml(p.name || key)}</b><br>
+        Gold: ${escapeHtml(p.gold ?? 0)}<br>
+        Capital: ${escapeHtml(capitalName)}
       `;
+
       playersDiv.appendChild(div);
     }
 
     /* ---------------- MAP ---------------- */
-    const map = L.map("map", {
-      crs: L.CRS.Simple,
-      minZoom: -2,
-      maxZoom: 2
-    });
+    if (typeof L === "undefined") {
+      throw new Error("Leaflet didn't load (L is undefined). Check Leaflet <script> tag in index.html.");
+    }
 
-    const bounds = [[0, 0], [state.map.height, state.map.width]];
-    L.imageOverlay(state.map.image, bounds).addTo(map);
+    const mapEl = document.getElementById("map");
+    if (!mapEl) throw new Error("Missing <div id='map'> in index.html");
+
+    const w = Number(state.map?.width);
+    const h = Number(state.map?.height);
+    const img = state.map?.image;
+
+    if (!img) throw new Error("state.json missing map.image (e.g. 'map.jpg')");
+    if (!Number.isFinite(w) || !Number.isFinite(h)) throw new Error("state.json map.width/height must be numbers");
+
+    const map = L.map("map", { crs: L.CRS.Simple, minZoom: -2, maxZoom: 2 });
+    const bounds = [[0, 0], [h, w]];
+
+    L.imageOverlay(img, bounds).addTo(map);
     map.fitBounds(bounds);
 
     /* ---------------- MARKERS ---------------- */
-    for (const m of state.markers) {
-      const prov = state.provinces[m.provinceId];
+    const markers = state.markers || [];
+
+    for (const m of markers) {
+      const prov = provinces[m.provinceId];
       if (!prov) continue;
 
-      const owner = state.players[prov.owner];
-      const colour = owner?.colour ?? "#000000";
+      const owner = players[prov.owner];
+      const fill = owner?.colour || "#777777";
+
+      const type = prov.type || "Site";
+      const income = prov.income ?? 0;
+      const buildings = Array.isArray(prov.buildings) ? prov.buildings : [];
 
       const radius =
-        prov.type === "City" ? 9 :
-        prov.type === "Keep" ? 7 : 6;
+        type === "City" ? 10 :
+        type === "Keep" ? 8 :
+        7;
 
-      L.circleMarker([m.y, m.x], {
-        radius: radius,
-        weight: 2,
+      // Make white visible: keep strong black stroke
+      L.circleMarker([Number(m.y), Number(m.x)], {
+        radius,
+        weight: 3,
         color: "#000",
-        fillColor: colour,
-        fillOpacity: 0.9
+        fillColor: fill,
+        fillOpacity: 0.95
       })
         .addTo(map)
         .bindPopup(`
-          <b>${escapeHtml(prov.name)}</b><br>
-          Type: ${prov.type}<br>
-          Owner: ${escapeHtml(owner?.name ?? "Unclaimed")}<br>
-          Income: ${prov.income}<br>
-          Buildings: ${escapeHtml(prov.buildings.join(", "))}
+          <b>${escapeHtml(prov.name || m.provinceId)}</b><br>
+          Type: ${escapeHtml(type)}<br>
+          Owner: ${escapeHtml(owner?.name || prov.owner || "Unclaimed")}<br>
+          Income: ${escapeHtml(income)}<br>
+          Buildings: ${escapeHtml(buildings.join(", ") || "-")}
         `);
     }
 
-    /* --------- COORDINATE PICKER (optional) --------- */
-    map.on("click", e => {
+    /* --------- COORDINATE PICKER (click map to get x/y) --------- */
+    map.on("click", (e) => {
       const x = Math.round(e.latlng.lng);
       const y = Math.round(e.latlng.lat);
-      console.log(`{ "x": ${x}, "y": ${y} }`);
+
+      L.popup()
+        .setLatLng(e.latlng)
+        .setContent(`<b>x:</b> ${x} &nbsp; <b>y:</b> ${y}<br><small>Copy these into state.json → markers</small>`)
+        .openOn(map);
+
+      console.log(`COORDS: { "x": ${x}, "y": ${y} }`);
     });
   })
-  .catch(err => {
+  .catch((err) => {
     console.error(err);
     setTurn("ERR");
   });
