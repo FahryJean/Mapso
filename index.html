@@ -5,17 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SGaming Epic Mapso</title>
 
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-  <!-- YOUR STYLES (cache-busted) -->
-  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="stylesheet" href="style.css?v=7" />
 </head>
 
 <body>
   <header class="header">
     <div>
-      <div class="title"><b>SGaming Epic Mapso</b></div>
+      <div class="title">SGaming Epic Mapso</div>
       <div class="subtitle">Turn <span id="turn">?</span></div>
     </div>
     <div class="hint">Status: <span id="status">booting…</span></div>
@@ -28,7 +25,6 @@
 
       <h2>Notes</h2>
       <p>Edit <code>state.json</code> each turn, then commit.</p>
-      <p><b>If it fails:</b> the error will appear in the Status line.</p>
     </section>
 
     <section class="mapwrap">
@@ -36,10 +32,27 @@
     </section>
   </main>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- NEW: bottom action panel -->
+  <section class="actions">
+    <div class="actions-title">Moves</div>
 
-  <!-- YOUR SCRIPT (cache-busted) -->
-  <script src="script.js?v=3"></script>
+    <div class="move-row">
+      <button class="move-btn" data-move="1">Move 1</button>
+      <div class="move-outcome" id="move-outcome-1">—</div>
+    </div>
+
+    <div class="move-row">
+      <button class="move-btn" data-move="2">Move 2</button>
+      <div class="move-outcome" id="move-outcome-2">—</div>
+    </div>
+
+    <div class="move-row">
+      <button class="move-btn" data-move="3">Move 3</button>
+      <div class="move-outcome" id="move-outcome-3">—</div>
+    </div>
+  </section>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
