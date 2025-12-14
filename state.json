@@ -18,7 +18,7 @@
       "name": "Lords of Valley Manors",
       "gold": 1400,
       "capital": "southport",
-      "colour": "#2e7d32"
+      "colour": "#2e8b57"
     }
   },
 
@@ -27,7 +27,7 @@
       "name": "Iron Pearl",
       "owner": "imperial_core",
       "type": "City",
-      "income": 300,
+      "income": 0,
       "buildings": ["capital"]
     },
 
@@ -35,53 +35,55 @@
       "name": "Southport",
       "owner": "valley_manors",
       "type": "City",
-      "income": 220,
-      "buildings": []
+      "income": 0,
+      "buildings": ["capital"]
     },
     "valley_rock": {
       "name": "Valley Rock",
       "owner": "valley_manors",
       "type": "City",
-      "income": 200,
+      "income": 0,
       "buildings": []
     },
     "southern_farmlands": {
       "name": "Southern Farmlands",
       "owner": "valley_manors",
       "type": "Town",
-      "income": 160,
+      "income": 0,
       "buildings": []
     },
     "greenshore_docks": {
       "name": "Greenshore Docks",
       "owner": "valley_manors",
       "type": "Town",
-      "income": 170,
+      "income": 0,
       "buildings": []
     },
     "fahry_pass": {
       "name": "Fahry Pass",
       "owner": "valley_manors",
       "type": "Keep",
-      "income": 120,
+      "income": 0,
       "buildings": []
     },
     "zbabs_hold": {
       "name": "Zbab's Hold",
       "owner": "valley_manors",
       "type": "Keep",
-      "income": 140,
+      "income": 0,
       "buildings": []
     }
   },
 
   "markers": [
-    { "id": "iron_pearl", "provinceId": "iron_pearl", "x": 0, "y": 0 },
+    { "id": "iron_pearl", "provinceId": "iron_pearl", "x": 3333, "y": 1165 },
 
     { "id": "southport", "provinceId": "southport", "x": 2002, "y": 845 },
     { "id": "valley_rock", "provinceId": "valley_rock", "x": 2464, "y": 1224 },
+
     { "id": "southern_farmlands", "provinceId": "southern_farmlands", "x": 2338, "y": 1489 },
     { "id": "greenshore_docks", "provinceId": "greenshore_docks", "x": 2338, "y": 1489 },
+
     { "id": "fahry_pass", "provinceId": "fahry_pass", "x": 1469, "y": 870 },
     { "id": "zbabs_hold", "provinceId": "zbabs_hold", "x": 2153, "y": 1442 }
   ]
