@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mapso Campaign Map</title>
 
-  <!-- Leaflet CSS (NO integrity hashes for now) -->
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Your styles -->
@@ -18,7 +18,7 @@
       <div class="title">Mapso</div>
       <div class="subtitle">Turn <span id="turn">?</span></div>
     </div>
-    <div class="hint">Click a marker for details.</div>
+    <div class="hint">Click a marker for details</div>
   </header>
 
   <main class="layout">
@@ -35,10 +35,10 @@
     </section>
   </main>
 
-  <!-- Leaflet JS -->
+  <!-- Leaflet JS (must be before script.js) -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Your script -->
-  <script src="script.js"></script>
+  <script src="script.js?v=1"></script>
 </body>
 </html>
