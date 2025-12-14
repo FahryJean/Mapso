@@ -11,14 +11,14 @@
     "imperial_core": {
       "name": "Imperial Core",
       "gold": 1800,
-      "colour": "#ffffff",
-      "capital": "iron_pearl"
+      "capital": "iron_pearl",
+      "colour": "#ffffff"
     },
-    "valley_lords": {
+    "valley_manors": {
       "name": "Lords of Valley Manors",
       "gold": 1400,
-      "colour": "#2f6f3e",
-      "capital": "southport"
+      "capital": "Southport",
+      "colour": "#2e7d32"
     }
   },
 
@@ -27,97 +27,62 @@
       "name": "Iron Pearl",
       "owner": "imperial_core",
       "type": "City",
-      "income": 500,
-      "buildings": ["capital", "imperial_palace"]
+      "income": 300,
+      "buildings": ["Capital"]
     },
 
     "southport": {
       "name": "Southport",
-      "owner": "valley_lords",
+      "owner": "valley_manors",
       "type": "City",
-      "income": 300,
-      "buildings": ["market", "harbour"]
+      "income": 220,
+      "buildings": []
     },
     "valley_rock": {
       "name": "Valley Rock",
-      "owner": "valley_lords",
+      "owner": "valley_manors",
       "type": "City",
-      "income": 260,
-      "buildings": ["walls"]
+      "income": 200,
+      "buildings": []
     },
     "southern_farmlands": {
       "name": "Southern Farmlands",
-      "owner": "valley_lords",
-      "type": "Settlement",
-      "income": 180,
-      "buildings": ["farms"]
+      "owner": "valley_manors",
+      "type": "Town",
+      "income": 160,
+      "buildings": []
     },
     "greenshore_docks": {
       "name": "Greenshore Docks",
-      "owner": "valley_lords",
-      "type": "Settlement",
-      "income": 220,
-      "buildings": ["dockyards"]
+      "owner": "valley_manors",
+      "type": "Town",
+      "income": 170,
+      "buildings": []
     },
     "fahry_pass": {
       "name": "Fahry Pass",
-      "owner": "valley_lords",
+      "owner": "valley_manors",
       "type": "Keep",
       "income": 120,
-      "buildings": ["garrison"]
+      "buildings": []
     },
-    "zbab_hold": {
+    "zbabs_hold": {
       "name": "Zbab's Hold",
-      "owner": "valley_lords",
+      "owner": "valley_manors",
       "type": "Keep",
       "income": 140,
-      "buildings": ["garrison"]
+      "buildings": []
     }
   },
 
   "markers": [
-    {
-      "id": "iron_pearl",
-      "provinceId": "iron_pearl",
-      "x": 2650,
-      "y": 1850
-    },
+    { "id": "iron_pearl", "provinceId": "iron_pearl", "x": 3333, "y": 1165 },
 
-    {
-      "id": "southport",
-      "provinceId": "southport",
-      "x": 2002,
-      "y": 845
-    },
-    {
-      "id": "valley_rock",
-      "provinceId": "valley_rock",
-      "x": 2464,
-      "y": 1224
-    },
-    {
-      "id": "southern_farmlands",
-      "provinceId": "southern_farmlands",
-      "x": 2338,
-      "y": 1489
-    },
-    {
-      "id": "greenshore_docks",
-      "provinceId": "greenshore_docks",
-      "x": 2338,
-      "y": 1489
-    },
-    {
-      "id": "fahry_pass",
-      "provinceId": "fahry_pass",
-      "x": 1469,
-      "y": 870
-    },
-    {
-      "id": "zbab_hold",
-      "provinceId": "zbab_hold",
-      "x": 2153,
-      "y": 1442
-    }
+    { "id": "southport", "provinceId": "southport", "x": 2002, "y": 845 },
+    { "id": "valley_rock", "provinceId": "valley_rock", "x": 2464, "y": 1224 },
+    { "id": "southern_farmlands", "provinceId": "southern_farmlands", "x": 2338, "y": 1489 },
+    { "id": "greenshore_docks", "provinceId": "greenshore_docks", "x": 2338, "y": 1489 },
+    { "id": "fahry_pass", "provinceId": "fahry_pass", "x": 1469, "y": 870 },
+    { "id": "zbabs_hold", "provinceId": "zbabs_hold", "x": 2153, "y": 1442 }
   ]
 }
