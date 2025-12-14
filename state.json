@@ -28,7 +28,7 @@
       "owner": "imperial_core",
       "type": "City",
       "income": 500,
-      "buildings": ["Imperial Jewel (10)"]
+      "buildings": ["Imperial Jewel (X)"]
     },
 
     "southport": {
@@ -36,42 +36,42 @@
       "owner": "valley_manors",
       "type": "City",
       "income": 200,
-      "buildings": ["Urban Sprawl (1)"]
+      "buildings": ["Urban Sprawl (II)"]
     },
     "valley_rock": {
       "name": "Valley Rock",
       "owner": "valley_manors",
       "type": "City",
       "income": 0,
-      "buildings": ["Urban Sprawl (1)"]
+      "buildings": ["Urban Sprawl (II)"]
     },
     "southern_farmlands": {
       "name": "Southern Farmlands",
       "owner": "valley_manors",
       "type": "Town",
       "income": 50,
-      "buildings": ["Wheat Farms"]
+      "buildings": ["Wheat Farms (I)"]
     },
     "greenshore_docks": {
       "name": "Greenshore Docks",
       "owner": "valley_manors",
       "type": "Town",
       "income": 150,
-      "buildings": ["Dockyard"]
+      "buildings": ["Dockyard (I)"]
     },
     "fahry_pass": {
       "name": "Fahry Pass",
       "owner": "valley_manors",
       "type": "Keep",
       "income": 100,
-      "buildings": ["Fortified Keep"]
+      "buildings": ["Fortified Keep (III)"]
     },
     "zbabs_hold": {
       "name": "Zbab's Hold",
       "owner": "valley_manors",
       "type": "Keep",
       "income": 100,
-      "buildings": ["Fortified Keep"]
+      "buildings": ["Fortified Keep (I)"]
     }
   },
 
