@@ -9,7 +9,7 @@ function setTurn(value) {
 }
 
 function escapeHtml(s) {
-  return String(s ?? "")
+  return String(s)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -17,24 +17,38 @@ function escapeHtml(s) {
     .replaceAll("'", "&#039;");
 }
 
-/* ---------------- MOVES (placeholder UI) ---------------- */
+/* ---------------- MOVE BUTTONS ---------------- */
 function wireMoves() {
   const btns = document.querySelectorAll(".move-btn");
+
   btns.forEach(btn => {
     btn.addEventListener("click", () => {
       const n = btn.getAttribute("data-move");
       const out = document.getElementById(`move-outcome-${n}`);
-      if (out) out.textContent = `Outcome for Move ${n}`;
+      if (!out) return;
+
+      // Reset in case it was already fading
+      out.style.opacity = "1";
+      out.style.transition = "opacity 1s linear";
+      out.textContent = `Outcome for Move ${n}`;
+
+      // After 10 seconds, fade out
+      setTimeout(() => {
+        out.style.opacity = "0";
+      }, 10000);
+
+      // After fade completes, clear text
+      setTimeout(() => {
+        out.textContent = "";
+        out.style.opacity = "1"; // reset for next time
+      }, 11000);
     });
   });
 }
 
-/* ---------------- MAIN ---------------- */
+/* ---------------- INIT ---------------- */
 setStatus("loading state.json…");
 setTurn("?");
-
-// Make buttons work even if something else fails
-wireMoves();
 
 fetch("state.json", { cache: "no-store" })
   .then(r => {
@@ -47,25 +61,19 @@ fetch("state.json", { cache: "no-store" })
 
     /* ---------------- PLAYERS PANEL ---------------- */
     const playersDiv = document.getElementById("players");
-    if (!playersDiv) throw new Error("Missing <div id='players'> in index.html");
-
+    if (!playersDiv) throw new Error("Missing #players in index.html");
     playersDiv.innerHTML = "";
 
     for (const [key, p] of Object.entries(state.players || {})) {
       const div = document.createElement("div");
       div.className = "player";
-
-      const colour = p.colour || "#000";
-      div.style.borderLeft = `8px solid ${colour}`;
+      div.style.borderLeft = `8px solid ${p.colour || "#000"}`;
       div.style.paddingLeft = "10px";
-      div.style.marginBottom = "18px"; // extra space between players
+      div.style.marginBottom = "18px";
 
       const capitalName =
-        state.provinces?.[p.capital]?.name ??
-        p.capital ??
-        "-";
-
-      const levies = Number(p.levies ?? 0);
+        state.provinces?.[p.capital]?.name ?? p.capital ?? "-";
+      const levies = p.levies ?? 0;
 
       div.innerHTML = `
         <b>${escapeHtml(p.name ?? key)}</b><br>
@@ -73,56 +81,39 @@ fetch("state.json", { cache: "no-store" })
         Levies/Patrols: ${escapeHtml(levies)}<br>
         Capital: ${escapeHtml(capitalName)}
       `;
-
       playersDiv.appendChild(div);
     }
 
     /* ---------------- MAP ---------------- */
-    if (typeof L === "undefined") {
-      throw new Error("Leaflet didn't load (L is undefined). Check Leaflet <script> in index.html.");
-    }
+    if (typeof L === "undefined")
+      throw new Error("Leaflet not loaded (L undefined).");
 
     const w = Number(state.map?.width);
     const h = Number(state.map?.height);
     const img = state.map?.image;
 
-    if (!img) throw new Error("state.map.image missing (e.g. 'map.jpg')");
-    if (!Number.isFinite(w) || !Number.isFinite(h)) {
+    if (!img) throw new Error("state.map.image missing (e.g. map.jpg)");
+    if (!Number.isFinite(w) || !Number.isFinite(h))
       throw new Error("state.map.width/height must be numbers");
-    }
 
     setStatus("initialising map…");
 
-    // Create map
     const map = L.map("map", {
       crs: L.CRS.Simple,
-      zoomSnap: 0.25,
-      zoomDelta: 0.25,
-      inertia: true,
-      worldCopyJump: false
+      minZoom: -2,
+      maxZoom: 2,
+      maxBounds: [[0, 0], [h, w]],
+      maxBoundsViscosity: 1.0
     });
 
-    // Image bounds: [ [y1, x1], [y2, x2] ]
     const bounds = [[0, 0], [h, w]];
-
-    // Add image overlay
     L.imageOverlay(img, bounds).addTo(map);
-
-    // Fit to image first
     map.fitBounds(bounds);
 
-    // Lock zoom-out so you can’t reveal “table” area around the map
-    const fittedZoom = map.getZoom();
-    map.setMinZoom(fittedZoom);
-
-    // Prevent panning outside the image bounds (no grey void)
-    map.setMaxBounds(bounds);
-    map.options.maxBoundsViscosity = 1.0;
-
-    // Coordinate picker (click map to get x/y)
-    map.on("click", (e) => {
-      const x = Math.round(e.latlng.lng); // lng = x in CRS.Simple
-      const y = Math.round(e.latlng.lat); // lat = y in CRS.Simple
+    /* ---- COORDINATE PICKER ---- */
+    map.on("click", e => {
+      const x = Math.round(e.latlng.lng);
+      const y = Math.round(e.latlng.lat);
 
       L.popup()
         .setLatLng(e.latlng)
@@ -135,7 +126,7 @@ fetch("state.json", { cache: "no-store" })
     });
 
     /* ---------------- MARKERS ---------------- */
-    for (const m of (state.markers || [])) {
+    for (const m of state.markers || []) {
       const prov = state.provinces?.[m.provinceId];
       if (!prov) continue;
 
@@ -154,19 +145,18 @@ fetch("state.json", { cache: "no-store" })
         fillColor: colour,
         fillOpacity: 0.9
       })
-        .addTo(map)
-        .bindPopup(`
-          <b>${escapeHtml(prov.name || m.provinceId)}</b><br>
-          Type: ${escapeHtml(prov.type || "—")}<br>
-          Owner: ${escapeHtml(owner?.name || ownerKey || "Unclaimed")}<br>
-          Income: ${escapeHtml(prov.income ?? 0)}<br>
-          Buildings: ${escapeHtml((prov.buildings || []).join(", ") || "-")}
-        `);
+      .addTo(map)
+      .bindPopup(`
+        <b>${escapeHtml(prov.name || m.provinceId)}</b><br>
+        Type: ${escapeHtml(prov.type || "—")}<br>
+        Owner: ${escapeHtml(owner?.name || ownerKey || "Unclaimed")}<br>
+        Income: ${escapeHtml(prov.income ?? 0)}<br>
+        Buildings: ${escapeHtml((prov.buildings || []).join(", ") || "-")}
+      `);
     }
 
     /* ---------------- MOVES PANEL ---------------- */
     wireMoves();
-
     setStatus("ready ✓");
   })
   .catch(err => {
