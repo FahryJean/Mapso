@@ -169,7 +169,59 @@ body {
 .leaflet-pane img {
   border-radius: 6px;
 }
+/* Bottom actions panel */
+.actions {
+  margin: 0 14px 14px 14px;
+  padding: 12px 14px;
+  border: 3px solid #5a3e1b;
+  border-radius: 12px;
 
+  background-color: #d2b48c;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.05) 0px,
+      rgba(255,255,255,0.05) 3px,
+      rgba(0,0,0,0.06) 6px,
+      rgba(0,0,0,0.06) 9px
+    );
+}
+
+.actions-title {
+  font-size: 18px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  padding-bottom: 4px;
+}
+
+.move-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.move-btn {
+  font-family: inherit;
+  font-size: 16px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 2px solid #5a3e1b;
+  background: rgba(255,255,255,0.35);
+  cursor: pointer;
+}
+
+.move-btn:hover {
+  background: rgba(255,255,255,0.55);
+}
+
+.move-outcome {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.35);
+  background: rgba(255,255,255,0.25);
+}
 /* Make popups fit the theme a bit more (optional, but nice) */
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
