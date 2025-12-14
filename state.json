@@ -77,7 +77,6 @@
 
   "markers": [
     { "id": "iron_pearl", "provinceId": "iron_pearl", "x": 3333, "y": 1165 },
-
     { "id": "southport", "provinceId": "southport", "x": 2002, "y": 845 },
     { "id": "valley_rock", "provinceId": "valley_rock", "x": 2464, "y": 1224 },
     { "id": "southern_farmlands", "provinceId": "southern_farmlands", "x": 2338, "y": 1489 },
