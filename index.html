@@ -5,13 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mapso Campaign Map</title>
 
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-o9N1j7kCzJpXkYpCzC1jG1c2nU1R9YxM4R2k0GZ8WXM="
-    crossorigin=""
-  />
+  <!-- Leaflet CSS (NO integrity hashes for now) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Your styles -->
   <link rel="stylesheet" href="style.css" />
@@ -23,13 +18,13 @@
       <div class="title">Mapso</div>
       <div class="subtitle">Turn <span id="turn">?</span></div>
     </div>
-    <div class="hint">Click a marker for details</div>
+    <div class="hint">Click a marker for details.</div>
   </header>
 
   <main class="layout">
     <section class="panel">
       <h2>Players</h2>
-      <div id="players"></div>
+      <div id="players" class="list"></div>
 
       <h2>Notes</h2>
       <p>Edit <code>state.json</code> each turn, then commit.</p>
@@ -40,12 +35,8 @@
     </section>
   </main>
 
-  <!-- Leaflet JS (MUST be before script.js) -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-o8EeKcQ2WmC2B7kZp8dT9m4FzH8c6U5R1k0E6k4E0EY="
-    crossorigin=""
-  ></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Your script -->
   <script src="script.js"></script>
