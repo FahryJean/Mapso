@@ -2,26 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Medieval Campaign Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mapso Campaign Map</title>
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-o9N1j7kCzJpXkYpCzC1jG1c2nU1R9YxM4R2k0GZ8WXM="
+    crossorigin=""
+  />
+
+  <!-- Your styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <header class="header">
     <div>
-      <div class="title">Medieval Campaign</div>
+      <div class="title">Mapso</div>
       <div class="subtitle">Turn <span id="turn">?</span></div>
     </div>
-    <div class="hint">Click a marker for details.</div>
+    <div class="hint">Click a marker for details</div>
   </header>
 
   <main class="layout">
     <section class="panel">
       <h2>Players</h2>
-      <div id="players" class="list"></div>
+      <div id="players"></div>
 
       <h2>Notes</h2>
       <p>Edit <code>state.json</code> each turn, then commit.</p>
@@ -32,4 +40,14 @@
     </section>
   </main>
 
-  <script src="https://unpkg.com/leaflet@
+  <!-- Leaflet JS (MUST be before script.js) -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o8EeKcQ2WmC2B7kZp8dT9m4FzH8c6U5R1k0E6k4E0EY="
+    crossorigin=""
+  ></script>
+
+  <!-- Your script -->
+  <script src="script.js"></script>
+</body>
+</html>
