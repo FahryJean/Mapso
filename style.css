@@ -76,7 +76,7 @@ body {
   border-radius: 12px;
 
   padding: 14px;
-  height: calc(100vh - 110px);
+  height: calc(100vh - 180px);
   overflow-y: auto;
 
   /* subtle lift */
@@ -124,7 +124,7 @@ body {
   /* important: make an inner margin so you see the table behind the map */
   
 
-  height: calc(100vh - 110px);
+  height: calc(100vh - 150px);
 
   /* outer shadow so the whole board pops */
   box-shadow: 0 12px 28px rgba(0,0,0,0.28);
