@@ -3,82 +3,97 @@ function setStatus(msg) {
   if (el) el.textContent = msg;
 }
 
-function safe(text) {
-  return String(text ?? "");
+function setTurn(value) {
+  const el = document.getElementById("turn");
+  if (el) el.textContent = value;
 }
 
-(async function main() {
-  try {
-    setStatus("Script started. Fetching state.json…");
+function escapeHtml(s) {
+  return String(s)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
-    const r = await fetch("state.json?v=2", { cache: "no-store" });
-    if (!r.ok) throw new Error(`state.json fetch failed: HTTP ${r.status}`);
-    const state = await r.json();
+// Prove script.js is executing at all:
+setTurn("JS OK");
+setStatus("loading state.json…");
 
-    // Update turn immediately (so you KNOW JS is running)
-    const turnEl = document.getElementById("turn");
-    if (!turnEl) throw new Error('Missing element: id="turn"');
-    turnEl.textContent = state.turn;
+fetch("state.json", { cache: "no-store" })
+  .then(r => {
+    if (!r.ok) throw new Error(`state.json failed: HTTP ${r.status}`);
+    return r.json();
+  })
+  .then(state => {
+    setStatus("state loaded ✓");
+    setTurn(state.turn ?? "?");
 
     // Render players
     const playersDiv = document.getElementById("players");
-    if (!playersDiv) throw new Error('Missing element: id="players"');
-    playersDiv.innerHTML = "";
+    if (!playersDiv) throw new Error("Missing <div id='players'> in index.html");
 
-    Object.entries(state.players || {}).forEach(([key, p]) => {
+    playersDiv.innerHTML = "";
+    for (const [key, p] of Object.entries(state.players || {})) {
       const div = document.createElement("div");
       div.className = "player";
-      div.innerHTML = `<b>${safe(p.name || key)}</b><br>Gold: ${safe(p.gold)}<br>Capital: ${safe(p.capital)}<br>Faction: ${safe(p.faction)}`;
+      div.innerHTML = `
+        <div class="name">${escapeHtml(p.name ?? key)}</div>
+        <div class="meta">Gold: <b>${escapeHtml(p.gold ?? 0)}</b><br>
+        Capital: ${escapeHtml(p.capital ?? "-")}<br>
+        Faction: ${escapeHtml(p.faction ?? "-")}</div>
+      `;
       playersDiv.appendChild(div);
-    });
+    }
 
-    // Verify Leaflet loaded
+    // Check Leaflet loaded
     if (typeof L === "undefined") {
-      throw new Error("Leaflet failed to load (L is undefined). Check unpkg access / blocked resources.");
+      throw new Error("Leaflet didn't load (L is undefined). Check the Leaflet <script> tag in index.html.");
     }
 
-    // Map init
+    // Create map
     const mapDiv = document.getElementById("map");
-    if (!mapDiv) throw new Error('Missing element: id="map"');
+    if (!mapDiv) throw new Error("Missing <div id='map'> in index.html");
 
-    const width = Number(state.map?.width);
-    const height = Number(state.map?.height);
-    const image = state.map?.image;
+    const w = Number(state.map?.width);
+    const h = Number(state.map?.height);
+    const img = state.map?.image;
 
-    if (!image) throw new Error('Missing state.map.image (e.g. "map.jpg")');
-    if (!Number.isFinite(width) || !Number.isFinite(height)) {
-      throw new Error("Invalid state.map.width/height (must be numbers)");
-    }
+    if (!img) throw new Error("state.json missing map.image (should be 'map.jpg')");
+    if (!Number.isFinite(w) || !Number.isFinite(h)) throw new Error("state.json map.width/height must be numbers");
 
-    const map = L.map("map", { crs: L.CRS.Simple, minZoom: -2, zoomSnap: 0.25 });
-    const bounds = [[0, 0], [height, width]];
+    setStatus("initialising map…");
 
-    setStatus(`State loaded. Turn ${state.turn}. Loading image overlay: ${image} (${width}×${height})…`);
+    const map = L.map("map", { crs: L.CRS.Simple, minZoom: -2, maxZoom: 2 });
+    const bounds = [[0, 0], [h, w]];
 
-    L.imageOverlay(image + "?v=2", bounds).addTo(map);
+    L.imageOverlay(img, bounds).addTo(map);
     map.fitBounds(bounds);
 
     // Markers
-    (state.markers || []).forEach(m => {
+    for (const m of (state.markers || [])) {
       const prov = (state.provinces || {})[m.provinceId];
-      if (!prov) return;
+      if (!prov) continue;
 
       const ownerKey = prov.owner;
       const owner = (state.players || {})[ownerKey];
 
       L.circleMarker([Number(m.y), Number(m.x)], { radius: 7, weight: 2 })
         .addTo(map)
-        .bindPopup(
-          `<b>${safe(prov.name)}</b><br>` +
-          `Owner: ${safe(owner?.name || ownerKey)}<br>` +
-          `Income: ${safe(prov.income)}<br>` +
-          `Buildings: ${safe((prov.buildings || []).join(", "))}`
-        );
-    });
+        .bindPopup(`
+          <b>${escapeHtml(prov.name || m.provinceId)}</b><br>
+          Owner: ${escapeHtml(owner?.name || ownerKey || "Unclaimed")}<br>
+          Income: ${escapeHtml(prov.income ?? 0)}<br>
+          Buildings: ${escapeHtml((prov.buildings || []).join(", ") || "-")}
+        `);
+    }
 
-    setStatus("OK. Map rendered.");
-  } catch (e) {
-    console.error(e);
-    setStatus("ERROR:\n" + (e && e.stack ? e.stack : e));
-  }
-})();
+    setStatus("ready ✓ (map loaded)");
+  })
+  .catch(err => {
+    console.error(err);
+    setStatus(`ERROR: ${err.message}`);
+    // Keep Turn showing something useful
+    setTurn("ERR");
+  });
