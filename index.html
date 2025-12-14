@@ -3,12 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mapso Campaign Map</title>
+  <title>Mapso</title>
 
-  <!-- Leaflet CSS (NO integrity; avoids SRI mismatch issues) -->
+  <!-- Leaflet CSS (no integrity, no surprises) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-  <!-- Your styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -18,7 +16,7 @@
       <div class="title">Mapso</div>
       <div class="subtitle">Turn <span id="turn">?</span></div>
     </div>
-    <div class="hint">Click a marker for details</div>
+    <div class="hint">Status: <span id="status">booting…</span></div>
   </header>
 
   <main class="layout">
@@ -26,13 +24,9 @@
       <h2>Players</h2>
       <div id="players" class="list"></div>
 
-      <h2>Status</h2>
-      <pre id="status" style="white-space:pre-wrap; background:#fff; border:1px solid #333; padding:8px; border-radius:8px;">
-Loading…
-      </pre>
-
       <h2>Notes</h2>
       <p>Edit <code>state.json</code> each turn, then commit.</p>
+      <p><b>If it fails:</b> the error will appear in the Status line.</p>
     </section>
 
     <section class="mapwrap">
@@ -40,10 +34,10 @@ Loading…
     </section>
   </main>
 
-  <!-- Leaflet JS (NO integrity; avoids SRI mismatch issues) -->
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Your script (cache-bust with ?v=2) -->
-  <script src="script.js?v=2"></script>
+  <!-- Your script -->
+  <script src="script.js"></script>
 </body>
 </html>
