@@ -71,6 +71,22 @@ fetch("state.json", { cache: "no-store" })
     L.imageOverlay(img, bounds).addTo(map);
     map.fitBounds(bounds);
 
+    // --- COORDINATE PICKER (click map to get x/y) ---
+map.on("click", (e) => {
+  const x = Math.round(e.latlng.lng); // lng = x in CRS.Simple
+  const y = Math.round(e.latlng.lat); // lat = y in CRS.Simple
+
+  // Show a popup where you clicked
+  L.popup()
+    .setLatLng(e.latlng)
+    .setContent(`<b>x:</b> ${x} <b>y:</b> ${y}<br><small>Put these in state.json markers</small>`)
+    .openOn(map);
+
+  // Also log to console for easy copy
+  console.log(`COORDS: { "x": ${x}, "y": ${y} }`);
+});
+
+
     // Markers
     for (const m of (state.markers || [])) {
       const prov = (state.provinces || {})[m.provinceId];
