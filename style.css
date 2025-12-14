@@ -1,51 +1,116 @@
+/* -------------------------------------------------
+   Google Font: IM Fell English
+   ------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap");
+
+/* -------------------------------------------------
+   Global
+   ------------------------------------------------- */
 body {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  background: #f2efe3;
+  font-family: "IM Fell English", Georgia, "Times New Roman", serif;
+  background: #e6ddcf; /* light chestnut / parchment */
+  color: #1e1b16;
 }
 
+/* -------------------------------------------------
+   Header
+   ------------------------------------------------- */
 .header {
   display: flex;
   justify-content: space-between;
-  padding: 16px;
-  background: #fbf7eb;
-  border-bottom: 2px solid #333;
+  align-items: flex-end;
+  padding: 16px 18px;
+  background: #f4efe6; /* lighter parchment */
+  border-bottom: 2px solid #3a332b;
 }
 
 .title {
-  font-size: 26px;
-  font-weight: bold;
+  font-size: 28px;
+  letter-spacing: 0.4px;
 }
 
 .subtitle {
-  font-size: 14px;
-  color: #555;
+  font-size: 15px;
+  color: #5a5146;
+  margin-top: 4px;
 }
 
+.hint {
+  font-size: 14px;
+  color: #6a5f51;
+}
+
+/* -------------------------------------------------
+   Layout
+   ------------------------------------------------- */
 .layout {
   display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 12px;
-  padding: 12px;
+  grid-template-columns: 340px 1fr;
+  gap: 14px;
+  padding: 14px;
 }
 
+/* -------------------------------------------------
+   Side Panel
+   ------------------------------------------------- */
 .panel {
-  background: #fbf7eb;
-  border: 2px solid #333;
-  border-radius: 10px;
-  padding: 12px;
-  height: calc(100vh - 100px);
+  background: #f7f2e9; /* parchment panel */
+  border: 2px solid #3a332b;
+  border-radius: 12px;
+  padding: 14px;
+  height: calc(100vh - 110px);
   overflow-y: auto;
 }
 
+/* Player entries */
+.player {
+  margin-bottom: 18px;
+  padding-left: 10px;
+}
+
+.player .name {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.player .meta {
+  font-size: 14px;
+  color: #4e463c;
+  line-height: 1.35;
+}
+
+/* Section headings */
+.panel h2 {
+  margin: 14px 0 8px;
+  font-size: 17px;
+  border-bottom: 1px solid #b8ac9a;
+  padding-bottom: 4px;
+}
+
+/* -------------------------------------------------
+   Map Container
+   ------------------------------------------------- */
 .mapwrap {
-  border: 2px solid #333;
-  border-radius: 10px;
+  background: #f7f2e9;
+  border: 2px solid #3a332b;
+  border-radius: 12px;
   overflow: hidden;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 110px);
 }
 
 #map {
   width: 100%;
   height: 100%;
+}
+
+/* -------------------------------------------------
+   Utility / Minor
+   ------------------------------------------------- */
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  background: #e9e2d6;
+  padding: 2px 4px;
+  border-radius: 4px;
 }
