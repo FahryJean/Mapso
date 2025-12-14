@@ -1,100 +1,95 @@
-/* -------------------------------------------------
-   Google Font: IM Fell English
-   ------------------------------------------------- */
-@import url("https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap");
+/* ===============================
+   FONT: IM FELL ENGLISH
+   =============================== */
+@import url("https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap");
 
-/* -------------------------------------------------
-   Global
-   ------------------------------------------------- */
+/* ===============================
+   GLOBAL
+   =============================== */
 body {
   margin: 0;
   font-family: "IM Fell English", Georgia, "Times New Roman", serif;
-  background: #e6ddcf; /* light chestnut / parchment */
-  color: #1e1b16;
+
+  /* PAGE BACKGROUND (light parchment brown) */
+  background: #e7dcc8;
+
+  color: #1f1f1f;
 }
 
-/* -------------------------------------------------
-   Header
-   ------------------------------------------------- */
+/* ===============================
+   HEADER
+   =============================== */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 16px 18px;
-  background: #f4efe6; /* lighter parchment */
-  border-bottom: 2px solid #3a332b;
+
+  padding: 16px 20px;
+
+  /* HEADER BACKGROUND (light chestnut) */
+  background: #d9c4a0;
+
+  border-bottom: 2px solid #3a2f1d;
 }
 
 .title {
   font-size: 28px;
-  letter-spacing: 0.4px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
 }
 
 .subtitle {
   font-size: 15px;
-  color: #5a5146;
-  margin-top: 4px;
+  color: #3a2f1d;
 }
 
-.hint {
-  font-size: 14px;
-  color: #6a5f51;
-}
-
-/* -------------------------------------------------
-   Layout
-   ------------------------------------------------- */
+/* ===============================
+   MAIN LAYOUT
+   =============================== */
 .layout {
   display: grid;
-  grid-template-columns: 340px 1fr;
+  grid-template-columns: 320px 1fr;
   gap: 14px;
   padding: 14px;
 }
 
-/* -------------------------------------------------
-   Side Panel
-   ------------------------------------------------- */
+/* ===============================
+   LEFT PANEL (PLAYERS / NOTES)
+   =============================== */
 .panel {
-  background: #f7f2e9; /* parchment panel */
-  border: 2px solid #3a332b;
+  background: #e3d0ad; /* LIGHT BROWN PANEL */
+
+  border: 2px solid #3a2f1d;
   border-radius: 12px;
+
   padding: 14px;
+
   height: calc(100vh - 110px);
   overflow-y: auto;
 }
 
-/* Player entries */
-.player {
-  margin-bottom: 18px;
-  padding-left: 10px;
-}
-
-.player .name {
-  font-size: 18px;
-  margin-bottom: 4px;
-}
-
-.player .meta {
-  font-size: 14px;
-  color: #4e463c;
-  line-height: 1.35;
-}
-
-/* Section headings */
 .panel h2 {
-  margin: 14px 0 8px;
-  font-size: 17px;
-  border-bottom: 1px solid #b8ac9a;
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 18px;
+  border-bottom: 1px solid #3a2f1d;
   padding-bottom: 4px;
 }
 
-/* -------------------------------------------------
-   Map Container
-   ------------------------------------------------- */
+/* Player entries (script.js already styles borders) */
+.panel .player {
+  margin-bottom: 18px; /* EXTRA SPACE BETWEEN FACTIONS */
+}
+
+/* ===============================
+   MAP CONTAINER
+   =============================== */
 .mapwrap {
-  background: #f7f2e9;
-  border: 2px solid #3a332b;
+  background: #ffffff;
+
+  border: 2px solid #3a2f1d;
   border-radius: 12px;
+
   overflow: hidden;
   height: calc(100vh - 110px);
 }
@@ -104,13 +99,16 @@ body {
   height: 100%;
 }
 
-/* -------------------------------------------------
-   Utility / Minor
-   ------------------------------------------------- */
-code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 12px;
-  background: #e9e2d6;
-  padding: 2px 4px;
-  border-radius: 4px;
+/* ===============================
+   LEAFLET POPUPS (OPTIONAL POLISH)
+   =============================== */
+.leaflet-popup-content-wrapper {
+  font-family: "IM Fell English", serif;
+  background: #f9f6ef;
+  color: #1f1f1f;
+  border-radius: 8px;
+}
+
+.leaflet-popup-tip {
+  background: #f9f6ef;
 }
