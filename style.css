@@ -75,6 +75,7 @@ body {
   border: 3px solid #5a3e1b;
   border-radius: 12px;
 
+  padding: 14px;
   height: calc(100vh - 110px);
   overflow-y: auto;
 
