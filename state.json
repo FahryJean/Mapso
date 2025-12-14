@@ -8,37 +8,116 @@
   },
 
   "players": {
-    "england": {
-      "name": "Kingdom of England",
-      "gold": 1200,
-      "capital": "london",
-      "faction": "England"
+    "imperial_core": {
+      "name": "Imperial Core",
+      "gold": 1800,
+      "colour": "#ffffff",
+      "capital": "iron_pearl"
     },
-    "france": {
-      "name": "Kingdom of France",
-      "gold": 950,
-      "capital": "paris",
-      "faction": "France"
+    "valley_lords": {
+      "name": "Lords of Valley Manors",
+      "gold": 1400,
+      "colour": "#2f6f3e",
+      "capital": "southport"
     }
   },
 
   "provinces": {
-    "london": {
-      "name": "London",
-      "owner": "england",
-      "income": 300,
-      "buildings": ["capital", "market", "barracks"]
+    "iron_pearl": {
+      "name": "Iron Pearl",
+      "owner": "imperial_core",
+      "type": "City",
+      "income": 500,
+      "buildings": ["capital", "imperial_palace"]
     },
-    "paris": {
-      "name": "Paris",
-      "owner": "france",
-      "income": 280,
-      "buildings": ["capital", "walls"]
+
+    "southport": {
+      "name": "Southport",
+      "owner": "valley_lords",
+      "type": "City",
+      "income": 300,
+      "buildings": ["market", "harbour"]
+    },
+    "valley_rock": {
+      "name": "Valley Rock",
+      "owner": "valley_lords",
+      "type": "City",
+      "income": 260,
+      "buildings": ["walls"]
+    },
+    "southern_farmlands": {
+      "name": "Southern Farmlands",
+      "owner": "valley_lords",
+      "type": "Settlement",
+      "income": 180,
+      "buildings": ["farms"]
+    },
+    "greenshore_docks": {
+      "name": "Greenshore Docks",
+      "owner": "valley_lords",
+      "type": "Settlement",
+      "income": 220,
+      "buildings": ["dockyards"]
+    },
+    "fahry_pass": {
+      "name": "Fahry Pass",
+      "owner": "valley_lords",
+      "type": "Keep",
+      "income": 120,
+      "buildings": ["garrison"]
+    },
+    "zbab_hold": {
+      "name": "Zbab's Hold",
+      "owner": "valley_lords",
+      "type": "Keep",
+      "income": 140,
+      "buildings": ["garrison"]
     }
   },
 
   "markers": [
-    { "id": "london", "provinceId": "london", "x": 740, "y": 620 },
-    { "id": "paris", "provinceId": "paris", "x": 980, "y": 910 }
+    {
+      "id": "iron_pearl",
+      "provinceId": "iron_pearl",
+      "x": 2650,
+      "y": 1850
+    },
+
+    {
+      "id": "southport",
+      "provinceId": "southport",
+      "x": 2002,
+      "y": 845
+    },
+    {
+      "id": "valley_rock",
+      "provinceId": "valley_rock",
+      "x": 2464,
+      "y": 1224
+    },
+    {
+      "id": "southern_farmlands",
+      "provinceId": "southern_farmlands",
+      "x": 2338,
+      "y": 1489
+    },
+    {
+      "id": "greenshore_docks",
+      "provinceId": "greenshore_docks",
+      "x": 2338,
+      "y": 1489
+    },
+    {
+      "id": "fahry_pass",
+      "provinceId": "fahry_pass",
+      "x": 1469,
+      "y": 870
+    },
+    {
+      "id": "zbab_hold",
+      "provinceId": "zbab_hold",
+      "x": 2153,
+      "y": 1442
+    }
   ]
 }
