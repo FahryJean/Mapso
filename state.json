@@ -78,13 +78,13 @@
   "markers": [
     { "id": "iron_pearl", "provinceId": "iron_pearl", "x": 3333, "y": 1165 },
 
-    { "id": "southport", "provinceId": "southport", "x": 2002, "y": 845 },
+    { "id": "southport", "provinceId": "southport", "x": 2039, "y": 849 },
     { "id": "valley_rock", "provinceId": "valley_rock", "x": 2464, "y": 1224 },
 
     { "id": "southern_farmlands", "provinceId": "southern_farmlands", "x": 2338, "y": 1489 },
     { "id": "greenshore_docks", "provinceId": "greenshore_docks", "x": 2338, "y": 1489 },
 
-    { "id": "fahry_pass", "provinceId": "fahry_pass", "x": 1469, "y": 870 },
-    { "id": "zbabs_hold", "provinceId": "zbabs_hold", "x": 2153, "y": 1442 }
+    { "id": "fahry_pass", "provinceId": "fahry_pass", "x": 1457, "y": 885 },
+    { "id": "zbabs_hold", "provinceId": "zbabs_hold", "x": 2172, "y": 1440 }
   ]
 }
