@@ -122,7 +122,7 @@ body {
   border-radius: 12px;
 
   /* important: make an inner margin so you see the table behind the map */
-  padding: 14px;
+  
 
   height: calc(100vh - 110px);
 
