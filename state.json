@@ -101,8 +101,9 @@
   },
 
   "markers": [
-    { "id": "iron_pearl", "provinceId": "iron_pearl", "x": 3543, "y": 1205 },
-    { "id": "imperial_orchards", "provinceId": "imperial_orchards", "x": 3333, "y": 1165 },
+    { "id": "iron_pearl", "provinceId": "iron_pearl", "x": 3333, "y": 1165 },
+   
+    { "id": "imperial_orchards", "provinceId": "imperial_orchards", "x": 3543, "y": 1205 },
 
     { "id": "southport", "provinceId": "southport", "x": 2039, "y": 849 },
     { "id": "valley_rock", "provinceId": "valley_rock", "x": 2464, "y": 1224 },
