@@ -11,13 +11,13 @@
     "imperial_core": {
       "name": "Imperial Core",
       "gold": 1800,
-      "levies": 100,
+      "levies": 500,
       "capital": "iron_pearl",
       "colour": "#5B2C6F"
     },
     "valley_manors": {
       "name": "Lords of Valley Manors",
-      "gold": 1400,
+      "gold": 750,
       "levies": 100,
       "capital": "southport",
       "colour": "#2e8b57"
