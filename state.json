@@ -39,6 +39,14 @@
       "income": 500,
       "buildings": ["Imperial Jewel (X)"]
     },
+    
+     "imperial_orchards": {
+   "name": "Imperial Orchards",
+      "owner": "imperial_core",
+      "type": "Industry",
+      "income": 250,
+      "buildings": ["Orchards (V)"]
+    },
 
     "southport": {
       "name": "Southport",
@@ -93,7 +101,8 @@
   },
 
   "markers": [
-    { "id": "iron_pearl", "provinceId": "iron_pearl", "x": 3333, "y": 1165 },
+    { "id": "iron_pearl", "provinceId": "iron_pearl", "x": 3543, "y": 1205 },
+    { "id": "imperial_orchards", "provinceId": "imperial_orchards", "x": 3333, "y": 1165 },
 
     { "id": "southport", "provinceId": "southport", "x": 2039, "y": 849 },
     { "id": "valley_rock", "provinceId": "valley_rock", "x": 2464, "y": 1224 },
