@@ -89,7 +89,7 @@ body{
 .sidepanel{
   grid-column:1;
   grid-row:1 / span 1;
-  height: calc(100vh - var(--headerH) - (var(--pad) * 2));
+  height: calc(97vh - var(--headerH) - (var(--pad) * 2));
 }
 
 .panel h2{
