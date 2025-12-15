@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SGaming Epic Mapso</title>
 
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="style.css?v=11" />
+  <link rel="stylesheet" href="style.css?v=7" />
 </head>
 
 <body>
@@ -23,8 +24,73 @@
       <h2>Players</h2>
       <div id="players" class="list"></div>
 
+      <h2>Moves</h2>
+
+      <!-- Example move buttons -->
+      <div class="moves">
+        <button class="move-btn" data-move="1">Improve Settlement</button>
+        <span class="move-outcome" id="move-outcome-1"></span>
+
+        <button class="move-btn" data-move="2">Expedition</button>
+        <span class="move-outcome" id="move-outcome-2"></span>
+
+        <button class="move-btn" data-move="3">Offensive Campaign</button>
+        <span class="move-outcome" id="move-outcome-3"></span>
+      </div>
+
+      <h2>Skirmishes</h2>
+
+      <div class="skirmish-box">
+        <label>
+          Faction
+          <select id="sk-faction" title="Choose which faction is attempting the skirmish (uses that faction’s gold and levies).">
+            <option value="">Loading…</option>
+          </select>
+        </label>
+
+        <label>
+          Threat difficulty
+          <input id="sk-threat" type="number" min="1" step="1" value="18"
+                 title="If Threat difficulty is higher than your roll product, the mission fails." />
+        </label>
+
+        <label>
+          Levies committed
+          <input id="sk-commit" type="number" min="0" step="1" value="50"
+                 title="How many levies you send. If you fail, these perish (for now: display only; you update state.json manually)." />
+        </label>
+
+        <button id="sk-roll">Roll skirmish</button>
+
+        <div class="sk-results">
+          <div class="sk-row">
+            <b>Training</b>
+            <span class="sk-help" title="D6. If faction gold > 1000, minimum roll is 3. Result = troop experience.">?</span>
+            <span id="sk-r1">—</span>
+          </div>
+          <div class="sk-row">
+            <b>Manpower</b>
+            <span class="sk-help" title="D6. If levies ≥ 200: minimum roll is 3. If levies > 200: roll twice, keep the higher.">?</span>
+            <span id="sk-r2">—</span>
+          </div>
+          <div class="sk-row">
+            <b>Surprise</b>
+            <span class="sk-help" title="Pure random D6. No modifiers.">?</span>
+            <span id="sk-r3">—</span>
+          </div>
+          <div class="sk-row">
+            <b>Total</b>
+            <span class="sk-help" title="Total = Training × Manpower × Surprise. If Total ≥ Threat difficulty, success.">?</span>
+            <span id="sk-total">—</span>
+          </div>
+
+          <div class="sk-outcome" id="sk-outcome">—</div>
+        </div>
+      </div>
+
       <h2>Notes</h2>
       <p>Edit <code>state.json</code> each turn, then commit.</p>
+      <p><b>If it fails:</b> the error will appear in the Status line.</p>
     </section>
 
     <section class="mapwrap">
@@ -32,27 +98,10 @@
     </section>
   </main>
 
-  <!-- NEW: bottom action panel -->
-  <section class="actions">
-    <div class="actions-title"><b>Moves</b></div>
-
-    <div class="move-row">
-      <button class="move-btn" data-move="1">Improve Settlement</button>
-      <div class="move-outcome" id="move-outcome-1"></div>
-    </div>
-
-    <div class="move-row">
-      <button class="move-btn" data-move="2">Arrange Expedition</button>
-      <div class="move-outcome" id="move-outcome-2"></div>
-    </div>
-
-    <div class="move-row">
-      <button class="move-btn" data-move="3">Offensive Campaign</button>
-      <div class="move-outcome" id="move-outcome-3"></div>
-    </div>
-  </section>
-
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Your script -->
   <script src="script.js?v=7"></script>
 </body>
 </html>
