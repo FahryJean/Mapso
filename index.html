@@ -8,8 +8,8 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-  <!-- Your styles -->
-  <link rel="stylesheet" href="style.css?v=14" />
+  <!-- Your styles (bump v= when you change style.css) -->
+  <link rel="stylesheet" href="style.css?v=15" />
 </head>
 
 <body>
@@ -40,7 +40,7 @@
     <!-- BOTTOM STACK (RIGHT / BOTTOM) -->
     <section class="bottomstack">
 
-      <!-- EXISTING BOTTOM PANEL (MOVES) -->
+      <!-- BOTTOM PANEL (MOVES) -->
       <div class="bottompanel">
         <h2>Moves</h2>
 
@@ -60,28 +60,27 @@
         </div>
       </div>
 
-      <!-- NEW BOTTOM PANEL (SKIRMISHES) -->
+      <!-- BOTTOM PANEL (SKIRMISHES) -->
       <div class="bottompanel">
         <h2>Skirmishes</h2>
 
-        <!-- Whatever IDs your script uses for skirmish inputs/results should live here -->
         <div class="skirmish-grid">
           <label>
             Faction
-            <input id="sk-faction" type="text" placeholder="Imperial Core" />
+            <span class="tip" title="Select which faction is undertaking the skirmish. Rolls will use that faction’s Gold and Levies.">?</span>
+            <select id="sk-faction"></select>
           </label>
 
           <label>
             Threat difficulty
-            <input id="sk-threat" type="number" placeholder="18" />
+            <span class="tip" title="If Threat > (Training × Manpower × Surprise), the mission fails. Otherwise it succeeds.">?</span>
+            <input id="sk-threat" type="number" min="1" placeholder="18" />
           </label>
 
           <button id="sk-roll" type="button">Roll skirmish</button>
         </div>
 
-        <div class="skirmish-results" id="sk-results">
-          <!-- Script writes results here -->
-        </div>
+        <div class="skirmish-results" id="sk-results"></div>
       </div>
 
     </section>
@@ -90,7 +89,7 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Your script -->
-  <script src="script.js?v=7"></script>
+  <!-- Your script (bump v= when you change script.js) -->
+  <script src="script.js?v=8"></script>
 </body>
 </html>
