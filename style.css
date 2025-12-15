@@ -1,15 +1,24 @@
 /* ---------------- FONT ---------------- */
 @import url("https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap");
 
-/* ---------------- BASE ---------------- */
+/* ---------------- THEME VARS ---------------- */
 :root{
   --wood1:#c8a77a;
   --wood2:#d2b48c;
   --woodBorder:#5a3e1b;
   --parchment:#ede6d6;
   --ink:#1f1a14;
+
+  /* layout sizing */
+  --sideW: 340px;
+  --gap: 14px;
+  --pad: 14px;
+
+  /* header height assumption (your current header is ~86px) */
+  --headerH: 86px;
 }
 
+/* ---------------- BASE ---------------- */
 body{
   margin:0;
   font-family:"IM Fell English", Georgia, serif;
@@ -17,7 +26,7 @@ body{
   color:var(--ink);
 }
 
-/* ---------------- HEADER ---------------- */
+/* ---------------- HEADER (WOOD) ---------------- */
 .header{
   display:flex;
   justify-content:space-between;
@@ -42,20 +51,19 @@ body{
 .hint{ font-size:14px; opacity:0.85; }
 
 /* ---------------- LAYOUT ---------------- */
-/* 2 columns, 2 rows:
-   - left panel spans both rows
-   - map sits top-right
-   - bottom panels sit bottom-right
+/*
+  IMPORTANT CHANGE:
+  - Row 1 holds: sidepanel + map (same height)
+  - Row 2 holds: (empty left) + bottomstack (starts below row 1)
+  So the map no longer gets squashed by the bottom panels.
 */
 .layout{
   display:grid;
-  grid-template-columns:340px 1fr;
-  grid-template-rows: 1fr auto;
-  gap:14px;
-  padding:14px;
-
-  /* Make the grid fill the viewport minus header */
-  height: calc(100vh - 86px);
+  grid-template-columns: var(--sideW) 1fr;
+  grid-template-rows: auto auto;
+  gap: var(--gap);
+  padding: var(--pad);
+  align-items:start;
 }
 
 /* ---------------- LEFT PANEL (WOOD) ---------------- */
@@ -72,54 +80,82 @@ body{
 
   border:3px solid var(--woodBorder);
   border-radius:12px;
-  padding:14px;
 
+  padding:14px;
   overflow-y:auto;
 }
 
-/* force left panel to span both rows */
+/* Make the side panel height match the map height */
 .sidepanel{
   grid-column:1;
-  grid-row: 1 / span 2;
+  grid-row:1 / span 1;
+  height: calc(100vh - var(--headerH) - (var(--pad) * 2));
 }
 
 .panel h2{
-  margin:10px 0 6px;
+  margin-top:10px;
+  margin-bottom:6px;
   font-size:18px;
   border-bottom:1px solid rgba(0,0,0,0.3);
   padding-bottom:4px;
 }
 
-.player{ margin-bottom:18px; padding-left:8px; }
-.player .name{ font-size:17px; }
+/* Player entry spacing */
+.player{
+  margin-bottom:18px;
+  padding-left:8px;
+}
+.player b{ font-size:17px; }
 
 /* ---------------- MAP WRAP ---------------- */
 .mapwrap{
   grid-column:2;
   grid-row:1;
 
-  background:#f7f2e7;
+  /* same height as sidepanel */
+  height: calc(100vh - var(--headerH) - (var(--pad) * 2));
+
+  /* “table” behind map */
+  background: #e6e0d2;
+
   border:3px solid var(--woodBorder);
   border-radius:12px;
   overflow:hidden;
 
-  /* Shadow so the map "pops" */
-  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  /* pop-out shadow */
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.25),
+    inset 0 0 0 1px rgba(255,255,255,0.25);
 }
 
+/* Leaflet container + map */
 #map{
   width:100%;
   height:100%;
+  background: transparent;
+}
+
+/* Optional: soften the hard edge of the map image inside leaflet */
+.leaflet-image-layer{
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.28));
 }
 
 /* ---------------- BOTTOM STACK ---------------- */
+/* Bottom panels start BELOW the map/sidepanel row */
 .bottomstack{
   grid-column:2;
   grid-row:2;
 
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap: var(--gap);
+}
+
+/* An empty cell under the left panel (so bottomstack starts after it) */
+.layout::before{
+  content:"";
+  grid-column:1;
+  grid-row:2;
 }
 
 /* bottom panels reuse the wood style */
@@ -137,13 +173,15 @@ body{
   border:3px solid var(--woodBorder);
   border-radius:12px;
   padding:12px 14px;
+
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
 }
 
-/* Moves row */
+/* Moves rows + outcome text (safe defaults) */
 .moves{
   display:flex;
-  gap:10px;
   align-items:center;
+  gap:10px;
   margin:8px 0;
 }
 
@@ -159,26 +197,27 @@ body{
 .move-outcome{
   min-height: 1.2em;
   display:inline-block;
+  opacity: 1;
 }
 
-/* Skirmish layout */
+/* Skirmish layout (if present) */
 .skirmish-grid{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  align-items:flex-end;
-  margin-top:8px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  align-items:end;
 }
 
 .skirmish-grid label{
   display:flex;
   flex-direction:column;
-  gap:4px;
+  gap:6px;
+  font-size:16px;
 }
 
 .skirmish-grid input{
   font-family:inherit;
-  padding:6px 8px;
+  padding:6px 10px;
   border-radius:10px;
   border:2px solid var(--woodBorder);
   background:#f7f2e7;
@@ -186,7 +225,7 @@ body{
 
 #sk-roll{
   font-family:inherit;
-  padding:6px 10px;
+  padding:8px 12px;
   border-radius:10px;
   border:2px solid var(--woodBorder);
   background:#f7f2e7;
