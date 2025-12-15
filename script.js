@@ -19,8 +19,8 @@ function escapeHtml(s) {
 
 /* ---------------- MOVE OUTCOMES (EDIT HERE) ---------------- */
 const MOVE_TEXT = {
-  1: "You attempt to improve one of your fiefs. Specify target to administrator (Event REF: IMP14)",
-  2: "You arrange an expedition. Specify target to administrator. (Event REF: EXP08)",
+  1: "You attempt to improve one of your fiefs. (Event REF: IMP14)",
+  2: "You arrange an expedition - Specify target to administrator. (Event REF: EXP08)",
   3: "You can not yet plan any offensive campaigns!"
 };
 
@@ -30,10 +30,11 @@ function clearAllMoveOutcomes() {
   activeMoveTimers.forEach(t => clearTimeout(t));
   activeMoveTimers = [];
 
-  document.querySelectorAll("[id^='move-outcome-']").forEach(out => {
+  const outs = document.querySelectorAll("[id^='move-outcome-']");
+  outs.forEach(out => {
     out.textContent = "";
     out.style.opacity = "1";
-    out.style.transition = "opacity 1s linear";
+    out.style.transition = "opacity 0.8s linear";
   });
 }
 
@@ -47,46 +48,130 @@ function showMoveOutcome(moveNumber) {
   out.textContent = text;
 
   out.style.opacity = "1";
-  out.style.transition = "opacity 1s linear";
+  out.style.transition = "opacity 0.8s linear";
 
-  // Fade after 10 seconds
+  // fade after 10 seconds
   const t1 = setTimeout(() => {
     out.style.opacity = "0";
   }, 10000);
 
-  // Clear shortly after fade
+  // clear after fade
   const t2 = setTimeout(() => {
     out.textContent = "";
     out.style.opacity = "1";
-  }, 11000);
+  }, 10850);
 
   activeMoveTimers.push(t1, t2);
 }
 
-/**
- * Robust wiring:
- * - Uses ONE delegated click handler (so no double-binding issues)
- * - Accepts data-move="1" etc
- */
 function wireMoves() {
-  // If we've already wired, don't wire again
-  if (window.__movesWired) return;
-  window.__movesWired = true;
+  const btns = document.querySelectorAll(".move-btn");
+  btns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const n = Number(btn.getAttribute("data-move"));
+      if (!Number.isFinite(n)) return;
+      showMoveOutcome(n);
+    });
+  });
+}
 
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".move-btn");
-    if (!btn) return;
+/* ---------------- SKIRMISH (DICE) ---------------- */
+function d6() {
+  return 1 + Math.floor(Math.random() * 6);
+}
 
-    // Must be a plain number in data-move, e.g. "1"
-    const raw = btn.getAttribute("data-move");
-    const n = Number(raw);
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
 
-    if (!Number.isFinite(n)) {
-      console.warn("Move button missing numeric data-move:", btn, "data-move=", raw);
+function populateFactionSelect(state) {
+  const sel = document.getElementById("sk-faction");
+  if (!sel) return;
+
+  sel.innerHTML = `<option value="">Select…</option>`;
+  for (const [key, p] of Object.entries(state.players || {})) {
+    const opt = document.createElement("option");
+    opt.value = key;
+    opt.textContent = p.name ?? key;
+    sel.appendChild(opt);
+  }
+}
+
+function rollTraining(player) {
+  let r = d6();
+  // If gold > 1000 => minimum 3
+  if ((player.gold ?? 0) > 1000) r = Math.max(r, 3);
+  return r;
+}
+
+function rollManpower(player) {
+  const levies = Number(player.levies ?? 0);
+
+  // Base roll (possibly advantage)
+  let r = d6();
+
+  // If levies > 200, roll twice keep higher
+  if (levies > 200) {
+    const r2 = d6();
+    r = Math.max(r, r2);
+  }
+
+  // If levies >= 200 => minimum 3
+  if (levies >= 200) r = Math.max(r, 3);
+
+  return r;
+}
+
+function rollSurprise() {
+  return d6();
+}
+
+function wireSkirmish(state) {
+  const btn = document.getElementById("sk-roll");
+  const sel = document.getElementById("sk-faction");
+  const threatInput = document.getElementById("sk-threat");
+  const commitInput = document.getElementById("sk-commit");
+
+  if (!btn || !sel || !threatInput || !commitInput) return;
+
+  btn.addEventListener("click", () => {
+    const factionKey = sel.value;
+    if (!factionKey) {
+      setText("sk-outcome", "Pick a faction first.");
       return;
     }
 
-    showMoveOutcome(n);
+    const player = state.players?.[factionKey];
+    if (!player) {
+      setText("sk-outcome", "Invalid faction selection.");
+      return;
+    }
+
+    const threat = Math.max(1, Number(threatInput.value || 1));
+    const committed = Math.max(0, Math.floor(Number(commitInput.value || 0)));
+
+    const r1 = rollTraining(player);
+    const r2 = rollManpower(player);
+    const r3 = rollSurprise();
+    const total = r1 * r2 * r3;
+
+    setText("sk-r1", r1);
+    setText("sk-r2", r2);
+    setText("sk-r3", r3);
+    setText("sk-total", total);
+
+    if (total >= threat) {
+      setText(
+        "sk-outcome",
+        `SUCCESS — Total ${total} vs Threat ${threat}. Mission completed. (Manual: apply rewards/changes in state.json.)`
+      );
+    } else {
+      setText(
+        "sk-outcome",
+        `FAILURE — Total ${total} vs Threat ${threat}. ${committed} committed levies perish (manual: subtract in state.json).`
+      );
+    }
   });
 }
 
@@ -103,7 +188,7 @@ fetch("state.json", { cache: "no-store" })
     setTurn(state.turn ?? "?");
     setStatus("state loaded ✓");
 
-    /* ---------------- PLAYERS PANEL ---------------- */
+    // Players panel
     const playersDiv = document.getElementById("players");
     if (!playersDiv) throw new Error("Missing #players in index.html");
     playersDiv.innerHTML = "";
@@ -127,10 +212,8 @@ fetch("state.json", { cache: "no-store" })
       playersDiv.appendChild(div);
     }
 
-    /* ---------------- MAP ---------------- */
-    if (typeof L === "undefined") {
-      throw new Error("Leaflet not loaded (L undefined). Check Leaflet <script> tag in index.html.");
-    }
+    // Map
+    if (typeof L === "undefined") throw new Error("Leaflet not loaded (L undefined).");
 
     const w = Number(state.map?.width);
     const h = Number(state.map?.height);
@@ -142,7 +225,6 @@ fetch("state.json", { cache: "no-store" })
     setStatus("initialising map…");
 
     const bounds = [[0, 0], [h, w]];
-
     const map = L.map("map", {
       crs: L.CRS.Simple,
       minZoom: -2,
@@ -167,8 +249,8 @@ fetch("state.json", { cache: "no-store" })
       console.log(`COORDS: { "x": ${x}, "y": ${y} }`);
     });
 
-    /* ---------------- MARKERS ---------------- */
-    for (const m of state.markers || []) {
+    // Markers
+    for (const m of (state.markers || [])) {
       const prov = state.provinces?.[m.provinceId];
       if (!prov) continue;
 
@@ -187,22 +269,28 @@ fetch("state.json", { cache: "no-store" })
         fillColor: colour,
         fillOpacity: 0.9
       })
-      .addTo(map)
-      .bindPopup(`
-        <b>${escapeHtml(prov.name || m.provinceId)}</b><br>
-        Type: ${escapeHtml(prov.type || "—")}<br>
-        Owner: ${escapeHtml(owner?.name || ownerKey || "Unclaimed")}<br>
-        Income: ${escapeHtml(prov.income ?? 0)}<br>
-        Buildings: ${escapeHtml((prov.buildings || []).join(", ") || "-")}
-      `);
+        .addTo(map)
+        .bindPopup(`
+          <b>${escapeHtml(prov.name || m.provinceId)}</b><br>
+          Type: ${escapeHtml(prov.type || "—")}<br>
+          Owner: ${escapeHtml(owner?.name || ownerKey || "Unclaimed")}<br>
+          Income: ${escapeHtml(prov.income ?? 0)}<br>
+          Buildings: ${escapeHtml((prov.buildings || []).join(", ") || "-")}
+        `);
     }
 
+    // Moves + Skirmish
     wireMoves();
+    populateFactionSelect(state);
+    wireSkirmish(state);
+
     setStatus("ready ✓");
   })
   .catch(err => {
     console.error(err);
     setStatus(`ERROR: ${err.message}`);
     setTurn("ERR");
+
+    // Keep moves working even if map fails
     wireMoves();
   });
