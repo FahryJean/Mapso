@@ -17,31 +17,69 @@ function escapeHtml(s) {
     .replaceAll("'", "&#039;");
 }
 
+/* ---------------- MOVE OUTCOMES (EDIT HERE) ----------------
+   This is where the outcome texts are "kept".
+   Add more moves by adding keys: 4, 5, 6...
+------------------------------------------------------------ */
+const MOVE_TEXT = {
+  1: "You attempt to improve one of your fiefs. (Event REF: IMP14)",
+  2: "You arrange an expedition - Specify target to administrator. (Modifier REF: EXP08)",
+  3: "You can not yet plan any offensive campaigns!"
+  // 4: "…",
+  // 5: "…"
+};
+
 /* ---------------- MOVE BUTTONS ---------------- */
+let activeMoveTimers = []; // holds timeouts so we can cancel on next click
+
+function clearAllMoveOutcomes() {
+  // Cancel any pending fade/clear timers
+  activeMoveTimers.forEach(t => clearTimeout(t));
+  activeMoveTimers = [];
+
+  // Clear all outcome elements
+  const outs = document.querySelectorAll("[id^='move-outcome-']");
+  outs.forEach(out => {
+    out.textContent = "";
+    out.style.opacity = "1";
+    out.style.transition = "opacity 1s linear";
+  });
+}
+
+function showMoveOutcome(moveNumber) {
+  clearAllMoveOutcomes();
+
+  const out = document.getElementById(`move-outcome-${moveNumber}`);
+  if (!out) return;
+
+  out.style.opacity = "1";
+  out.style.transition = "opacity 1s linear";
+
+  // Use custom text, fallback if missing
+  const text = MOVE_TEXT[moveNumber] ?? `Outcome for Move ${moveNumber}`;
+  out.textContent = text;
+
+  // After 5 seconds, fade out
+  const t1 = setTimeout(() => {
+    out.style.opacity = "0";
+  }, 5000);
+
+  // After fade completes, clear text + reset opacity
+  const t2 = setTimeout(() => {
+    out.textContent = "";
+    out.style.opacity = "1";
+  }, 8000);
+
+  activeMoveTimers.push(t1, t2);
+}
+
 function wireMoves() {
   const btns = document.querySelectorAll(".move-btn");
-
   btns.forEach(btn => {
     btn.addEventListener("click", () => {
-      const n = btn.getAttribute("data-move");
-      const out = document.getElementById(`move-outcome-${n}`);
-      if (!out) return;
-
-      // Reset in case it was already fading
-      out.style.opacity = "1";
-      out.style.transition = "opacity 1s linear";
-      out.textContent = `Outcome for Move ${n}`;
-
-      // After 10 seconds, fade out
-      setTimeout(() => {
-        out.style.opacity = "0";
-      }, 10000);
-
-      // After fade completes, clear text
-      setTimeout(() => {
-        out.textContent = "";
-        out.style.opacity = "1"; // reset for next time
-      }, 11000);
+      const n = Number(btn.getAttribute("data-move"));
+      if (!Number.isFinite(n)) return;
+      showMoveOutcome(n);
     });
   });
 }
@@ -98,22 +136,25 @@ fetch("state.json", { cache: "no-store" })
 
     setStatus("initialising map…");
 
+    const bounds = [[0, 0], [h, w]];
+
     const map = L.map("map", {
       crs: L.CRS.Simple,
       minZoom: -2,
       maxZoom: 2,
-      maxBounds: [[0, 0], [h, w]],
+
+      // Lock map panning to the image bounds
+      maxBounds: bounds,
       maxBoundsViscosity: 1.0
     });
 
-    const bounds = [[0, 0], [h, w]];
     L.imageOverlay(img, bounds).addTo(map);
     map.fitBounds(bounds);
 
-    /* ---- COORDINATE PICKER ---- */
+    /* ---- COORDINATE PICKER (click map to get x/y) ---- */
     map.on("click", e => {
-      const x = Math.round(e.latlng.lng);
-      const y = Math.round(e.latlng.lat);
+      const x = Math.round(e.latlng.lng); // lng = x in CRS.Simple
+      const y = Math.round(e.latlng.lat); // lat = y in CRS.Simple
 
       L.popup()
         .setLatLng(e.latlng)
@@ -145,14 +186,14 @@ fetch("state.json", { cache: "no-store" })
         fillColor: colour,
         fillOpacity: 0.9
       })
-      .addTo(map)
-      .bindPopup(`
-        <b>${escapeHtml(prov.name || m.provinceId)}</b><br>
-        Type: ${escapeHtml(prov.type || "—")}<br>
-        Owner: ${escapeHtml(owner?.name || ownerKey || "Unclaimed")}<br>
-        Income: ${escapeHtml(prov.income ?? 0)}<br>
-        Buildings: ${escapeHtml((prov.buildings || []).join(", ") || "-")}
-      `);
+        .addTo(map)
+        .bindPopup(`
+          <b>${escapeHtml(prov.name || m.provinceId)}</b><br>
+          Type: ${escapeHtml(prov.type || "—")}<br>
+          Owner: ${escapeHtml(owner?.name || ownerKey || "Unclaimed")}<br>
+          Income: ${escapeHtml(prov.income ?? 0)}<br>
+          Buildings: ${escapeHtml((prov.buildings || []).join(", ") || "-")}
+        `);
     }
 
     /* ---------------- MOVES PANEL ---------------- */
@@ -163,5 +204,6 @@ fetch("state.json", { cache: "no-store" })
     console.error(err);
     setStatus(`ERROR: ${err.message}`);
     setTurn("ERR");
+    // still wire moves so buttons do something even if map fails
     wireMoves();
   });
