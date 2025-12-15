@@ -23,7 +23,7 @@ function escapeHtml(s) {
 ------------------------------------------------------------ */
 const MOVE_TEXT = {
   1: "You attempt to improve one of your fiefs. (Event REF: IMP14)",
-  2: "You arrange an expedition - Specify target to administrator. (Modifier REF: EXP08)",
+  2: "You arrange an expedition - Specify target to administrator. (Event REF: EXP08)",
   3: "You can not yet plan any offensive campaigns!"
   // 4: "…",
   // 5: "…"
