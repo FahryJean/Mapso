@@ -10,14 +10,14 @@
   --ink:#1f1a14;
 
   /* layout sizing */
-  --sideW: 340px;
+  --sideW: 340px;        /* left + right panel width */
   --gap: 14px;
   --pad: 14px;
 
-  /* if your header height changes a lot, update this */
+  /* if your header height changes, update this */
   --headerH: 86px;
 
-  /* ONE SHARED HEIGHT for sidepanel + map */
+  /* ONE SHARED HEIGHT for side panels + map */
   --mainH: calc(100vh - var(--headerH) - (var(--pad) * 2));
 }
 
@@ -54,17 +54,19 @@ body{
 .hint{ font-size:14px; opacity:0.85; }
 
 /* ---------------- LAYOUT ---------------- */
+/* 3 columns now: LEFT | MAP | RIGHT */
 .layout{
   display:grid;
-  grid-template-columns: var(--sideW) 1fr;
+  grid-template-columns: var(--sideW) 1fr var(--sideW);
   grid-template-rows: auto auto;
   gap: var(--gap);
   padding: var(--pad);
   align-items:start;
 }
 
-/* ---------------- LEFT PANEL ---------------- */
-.panel{
+/* ---------------- PANELS (WOOD) ---------------- */
+.panel,
+.bottompanel{
   background-color:var(--wood2);
   background-image:
     repeating-linear-gradient(
@@ -78,16 +80,26 @@ body{
   border:3px solid var(--woodBorder);
   border-radius:12px;
   padding:14px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+
+.panel{
   overflow-y:auto;
+  height: var(--mainH);
 }
 
 .sidepanel{
   grid-column:1;
   grid-row:1;
-  height: var(--mainH);
 }
 
-.panel h2{
+.rightpanel{
+  grid-column:3;
+  grid-row:1;
+}
+
+.panel h2,
+.bottompanel h2{
   margin-top:10px;
   margin-bottom:6px;
   font-size:18px;
@@ -95,13 +107,14 @@ body{
   padding-bottom:4px;
 }
 
+/* ---------------- PLAYER ENTRIES ---------------- */
 .player{
   margin-bottom:18px;
   padding-left:8px;
 }
 .player b{ font-size:17px; }
 
-/* ---------------- MAP WRAP ---------------- */
+/* ---------------- MAP WRAP (MIDDLE) ---------------- */
 .mapwrap{
   grid-column:2;
   grid-row:1;
@@ -127,7 +140,7 @@ body{
   filter: drop-shadow(0 8px 18px rgba(0,0,0,0.28));
 }
 
-/* ---------------- BOTTOM STACK ---------------- */
+/* ---------------- BOTTOM STACK (ONLY UNDER MAP) ---------------- */
 .bottomstack{
   grid-column:2;
   grid-row:2;
@@ -137,30 +150,7 @@ body{
   gap: var(--gap);
 }
 
-/* Keep an empty cell under the left panel */
-.layout::before{
-  content:"";
-  grid-column:1;
-  grid-row:2;
-}
-
-.bottompanel{
-  background-color:var(--wood2);
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255,255,255,0.05) 0px,
-      rgba(255,255,255,0.05) 3px,
-      rgba(0,0,0,0.06) 6px,
-      rgba(0,0,0,0.06) 9px
-    );
-
-  border:3px solid var(--woodBorder);
-  border-radius:12px;
-  padding:12px 14px;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
-}
-
+/* ---------------- MOVES ---------------- */
 .moves{
   display:flex;
   align-items:center;
@@ -183,7 +173,7 @@ body{
   opacity: 1;
 }
 
-/* Skirmish layout */
+/* ---------------- SKIRMISH ---------------- */
 .skirmish-grid{
   display:grid;
   grid-template-columns: 1fr 1fr auto;
