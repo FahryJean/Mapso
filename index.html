@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Your styles (bump v= when you change style.css) -->
-  <link rel="stylesheet" href="style.css?v=15" />
+  <link rel="stylesheet" href="style.css?v=16" />
 </head>
 
 <body>
@@ -32,35 +32,33 @@
       <p><b>If it fails:</b> the error will appear in the Status line.</p>
     </section>
 
-    <!-- MAP (RIGHT / TOP) -->
+    <!-- MAP (MIDDLE) -->
     <section class="mapwrap">
       <div id="map"></div>
     </section>
 
-    <!-- BOTTOM STACK (RIGHT / BOTTOM) -->
-    <section class="bottomstack">
+    <!-- RIGHT PANEL (MOVES) -->
+    <section class="panel rightpanel">
+      <h2>Moves</h2>
 
-      <!-- BOTTOM PANEL (MOVES) -->
-      <div class="bottompanel">
-        <h2>Moves</h2>
-
-        <div class="moves">
-          <button class="move-btn" data-move="1">Improve Settlement</button>
-          <span class="move-outcome" id="move-outcome-1"></span>
-        </div>
-
-        <div class="moves">
-          <button class="move-btn" data-move="2">Arrange Expedition</button>
-          <span class="move-outcome" id="move-outcome-2"></span>
-        </div>
-
-        <div class="moves">
-          <button class="move-btn" data-move="3">Offensive Campaign</button>
-          <span class="move-outcome" id="move-outcome-3"></span>
-        </div>
+      <div class="moves">
+        <button class="move-btn" data-move="1">Improve Settlement</button>
+        <span class="move-outcome" id="move-outcome-1"></span>
       </div>
 
-      <!-- BOTTOM PANEL (SKIRMISHES) -->
+      <div class="moves">
+        <button class="move-btn" data-move="2">Arrange Expedition</button>
+        <span class="move-outcome" id="move-outcome-2"></span>
+      </div>
+
+      <div class="moves">
+        <button class="move-btn" data-move="3">Offensive Campaign</button>
+        <span class="move-outcome" id="move-outcome-3"></span>
+      </div>
+    </section>
+
+    <!-- BOTTOM (ONLY UNDER MAP) -->
+    <section class="bottomstack">
       <div class="bottompanel">
         <h2>Skirmishes</h2>
 
@@ -82,7 +80,6 @@
 
         <div class="skirmish-results" id="sk-results"></div>
       </div>
-
     </section>
   </main>
 
