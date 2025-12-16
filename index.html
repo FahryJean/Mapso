@@ -22,93 +22,78 @@
   </header>
 
   <main class="layout">
+
     <!-- LEFT PANEL -->
     <section class="panel sidepanel">
       <h2>Players</h2>
       <div id="players" class="list"></div>
 
       <h2>Leaderboard</h2>
-
-      <div class="leaderboard">
-        <div class="lb-row">
-          <div class="lb-title">Economic Hegemon</div>
-          <div class="lb-sub">Highest total Income • unique events & development outcomes</div>
-          <div class="lb-holder" id="lb-economic">—</div>
-        </div>
-
-        <div class="lb-row">
-          <div class="lb-title">Secure Routes</div>
-          <div class="lb-sub">Highest Levies/Patrols • +20 income per owned fief & unique events</div>
-          <div class="lb-holder" id="lb-routes">—</div>
-        </div>
-
-        <div class="lb-row">
-          <div class="lb-title">Bank of the Mapso</div>
-          <div class="lb-sub">Highest Gold • investment & moneylending mechanics</div>
-          <div class="lb-holder" id="lb-bank">—</div>
-        </div>
+      <div id="leaderboard" class="leaderboard">
+        <div class="leaderboard-item">Loading…</div>
       </div>
     </section>
 
-    <!-- MAP (RIGHT / TOP) -->
+    <!-- MAP -->
     <section class="mapwrap">
       <div id="map"></div>
     </section>
 
-    <!-- BOTTOM STACK (RIGHT / BOTTOM) -->
-    <section class="bottomstack">
+    <!-- RIGHT PANEL -->
+    <section class="panel rightpanel">
+      <h2>Moves</h2>
 
-      <!-- BOTTOM PANEL (MOVES + SKIRMISHES) -->
-      <div class="bottompanel">
-        <h2>Moves</h2>
-
-        <div class="moves">
-          <button class="move-btn" data-move="1">Improve Settlement</button>
-          <span class="move-outcome" id="move-outcome-1"></span>
-        </div>
-
-        <div class="moves">
-          <button class="move-btn" data-move="2">Arrange Expedition</button>
-          <span class="move-outcome" id="move-outcome-2"></span>
-        </div>
-
-        <div class="moves">
-          <button class="move-btn" data-move="3">Offensive Campaign</button>
-          <span class="move-outcome" id="move-outcome-3"></span>
-        </div>
-
-        <hr class="sep" />
-
-        <h2>Skirmishes</h2>
-
-        <div class="skirmish-box">
-          <div class="skirmish-grid">
-            <label>
-              Faction
-              <span class="tip" title="Select which faction is attempting the skirmish. Rolls will use that faction’s Gold and Levies.">?</span>
-              <select id="sk-faction"></select>
-            </label>
-
-            <label>
-              Threat difficulty
-              <span class="tip" title="If Threat > (Training × Manpower × Surprise), the mission fails. Otherwise it succeeds.">?</span>
-              <input id="sk-threat" type="number" min="1" placeholder="00" />
-            </label>
-
-            <button id="sk-roll" type="button">Roll skirmish</button>
-          </div>
-
-          <div class="skirmish-results" id="sk-results"></div>
-        </div>
-
-        <hr class="sep" />
-
-        <h2>Notes</h2>
-        <p>Edit <code>state.json</code> each turn, then commit.</p>
-        <p><b>If it fails:</b> the error will appear in the Status line.</p>
+      <div class="moves">
+        <button class="move-btn" data-move="1">Improve Settlement</button>
+        <span class="move-outcome" id="move-outcome-1"></span>
       </div>
 
+      <div class="moves">
+        <button class="move-btn" data-move="2">Arrange Expedition</button>
+        <span class="move-outcome" id="move-outcome-2"></span>
+      </div>
+
+      <div class="moves">
+        <button class="move-btn" data-move="3">Plan Offensive Campaign</button>
+        <span class="move-outcome" id="move-outcome-3"></span>
+      </div>
+
+      <h2>Notes</h2>
+      <p>Edit <code>state.json</code> each turn, then commit.</p>
+      <p><b>If it fails:</b> the error will appear in the Status line.</p>
     </section>
+
+    <!-- BOTTOM (SKIRMISHES) -->
+    <section class="bottomstack">
+      <div class="bottompanel">
+        <h2>Skirmishes</h2>
+
+        <div class="skirmish-grid">
+          <div class="sk-field">
+            <label for="sk-faction">Faction</label>
+            <select id="sk-faction"></select>
+          </div>
+
+          <div class="sk-field">
+            <label for="sk-threat">Threat difficulty</label>
+            <input id="sk-threat" type="number" min="1" value="18" />
+          </div>
+
+          <div class="sk-field sk-actions">
+            <button id="sk-roll">Roll skirmish</button>
+          </div>
+        </div>
+
+        <div class="sk-help">
+          <span class="tip" title="Training = troop experience. If gold &gt; 1000, minimum roll is 3.">Training</span>
+          <span class="tip" title="Manpower = ability to sustain losses. If levies ≥ 200, minimum roll is 3.">Manpower</span>
+          <span class="tip" title="Surprise = random factor, always a straight d6.">Surprise</span>
+        </div>
+
+        <div class="skirmish-results" id="sk-results"></div>
+      </div>
+    </section>
+
   </main>
 
   <!-- Leaflet JS -->
