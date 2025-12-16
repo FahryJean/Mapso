@@ -113,7 +113,7 @@
       "id": "evt_Pirates",
       "type": "Military",
       "title": "Pirates",
-      "description": "This area is plauged by a band of lawless seafaring men, a shame...",
+      "description": "This area is plauged by a band of pirates, surely somebody has to deal with them?",
       "x": 2958,
       "y": 871
     },
@@ -121,7 +121,7 @@
       "id": "evt_cavegoblins",
       "type": "Military",
       "title": "Cave Goblin Infestation",
-      "description": "A pack of mindless goblins have made their way into this area through the nearby hills and mountains, a military response is most appropriate",
+      "description": "A pack of mindless goblins have made their way into this area through the nearby hills and mountains, a military response is most appropriate.",
       "x": 2710,
       "y": 1148
     }
