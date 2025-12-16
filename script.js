@@ -17,13 +17,18 @@ function escapeHtml(s) {
     .replaceAll("'", "&#039;");
 }
 
-/* ---------------- MOVES (TEXTS EDIT HERE) ---------------- */
+function d6() {
+  return Math.floor(Math.random() * 6) + 1;
+}
+
+/* ---------------- MOVE OUTCOMES (EDIT HERE) ---------------- */
 const MOVE_TEXT = {
-  1: "You attempt to improve one of your fiefs. Specify Target (Event REF: IMP14)",
-  2: "You arrange an expedition. Specify Target (Event REF: EXP08)",
-  3: "You cannot yet plan any offensive campaigns!"
+  1: "You attempt to improve one of your fiefs. (Event REF: IMP14)",
+  2: "You arrange an expedition — specify target to administrator. (Event REF: EXP08)",
+  3: "You can not yet plan any offensive campaigns!"
 };
 
+/* ---------------- MOVES UI ---------------- */
 let moveTimers = [];
 
 function clearAllMoveOutcomes() {
@@ -53,11 +58,12 @@ function showMoveOutcome(n) {
   moveTimers.push(setTimeout(() => {
     out.textContent = "";
     out.style.opacity = "1";
-  }, 11000));
+  }, 11200));
 }
 
 function wireMoves() {
-  document.querySelectorAll(".move-btn").forEach(btn => {
+  const btns = document.querySelectorAll(".move-btn");
+  btns.forEach(btn => {
     btn.addEventListener("click", () => {
       const n = Number(btn.getAttribute("data-move"));
       if (!Number.isFinite(n)) return;
@@ -66,12 +72,74 @@ function wireMoves() {
   });
 }
 
-/* ---------------- SKIRMISHES ---------------- */
+/* ---------------- LEADERBOARD ---------------- */
+function computeIncomeByFaction(state) {
+  const incomeBy = {};
+  const ownedCountBy = {};
+  for (const key of Object.keys(state.players || {})) {
+    incomeBy[key] = 0;
+    ownedCountBy[key] = 0;
+  }
 
-function d6() {
-  return 1 + Math.floor(Math.random() * 6);
+  for (const prov of Object.values(state.provinces || {})) {
+    const owner = prov?.owner;
+    if (!owner || !(owner in incomeBy)) continue;
+    incomeBy[owner] += Number(prov.income ?? 0);
+    ownedCountBy[owner] += 1;
+  }
+  return { incomeBy, ownedCountBy };
 }
 
+function maxKeys(obj) {
+  let best = -Infinity;
+  const keys = [];
+  for (const [k, v] of Object.entries(obj)) {
+    const n = Number(v ?? 0);
+    if (n > best) {
+      best = n;
+      keys.length = 0;
+      keys.push(k);
+    } else if (n === best) {
+      keys.push(k);
+    }
+  }
+  return { keys, value: best };
+}
+
+function renderLeaderboard(state) {
+  const econEl = document.getElementById("lb-economic");
+  const routesEl = document.getElementById("lb-routes");
+  const bankEl = document.getElementById("lb-bank");
+  if (!econEl || !routesEl || !bankEl) return;
+
+  const players = state.players || {};
+  const { incomeBy, ownedCountBy } = computeIncomeByFaction(state);
+
+  const econ = maxKeys(incomeBy);
+  const routes = maxKeys(Object.fromEntries(Object.entries(players).map(([k,p]) => [k, Number(p.levies ?? 0)])));
+  const bank = maxKeys(Object.fromEntries(Object.entries(players).map(([k,p]) => [k, Number(p.gold ?? 0)])));
+
+  function fmtHolders(result, suffix) {
+    if (!result.keys.length) return "—";
+    const names = result.keys.map(k => players[k]?.name ?? k).join(", ");
+    const tie = result.keys.length > 1 ? " (tie)" : "";
+    return `${escapeHtml(names)}${tie} — ${escapeHtml(result.value)}${suffix}`;
+  }
+
+  econEl.innerHTML = fmtHolders(econ, " income");
+  routesEl.innerHTML = fmtHolders(routes, " levies");
+
+  // Bonus preview (doesn't auto-apply yet, just shows the number)
+  if (routes.keys.length === 1) {
+    const k = routes.keys[0];
+    const owned = ownedCountBy[k] ?? 0;
+    routesEl.innerHTML += `<div style="opacity:.8;font-weight:400;margin-top:4px">Bonus preview: +${owned * 20} total income (${owned} fiefs × 20)</div>`;
+  }
+
+  bankEl.innerHTML = fmtHolders(bank, " gold");
+}
+
+/* ---------------- SKIRMISHES ---------------- */
 function wireSkirmish(state) {
   const sel = document.getElementById("sk-faction");
   const threatEl = document.getElementById("sk-threat");
@@ -89,8 +157,6 @@ function wireSkirmish(state) {
     opt.textContent = p.name ?? key;
     sel.appendChild(opt);
   }
-
-  // default to first player
   if (sel.options.length > 0) sel.value = sel.options[0].value;
 
   function renderResult(html) {
@@ -119,19 +185,12 @@ function wireSkirmish(state) {
     const trainingMin = (gold > 1000) ? 3 : 1;
     if (training < trainingMin) training = trainingMin;
 
-    // Roll 2: Manpower
+    // Roll 2: Manpower (single roll)
     // - If levies >= 200: minimum 3
-    // - If levies > 200: advantage (roll twice, take higher) to “increase chance to be higher”
-    let manpowerA = d6();
-    let manpowerB = null;
-    let manpower = manpowerA;
-
-    if (levies > 200) {
-      manpowerB = d6();
-      manpower = Math.max(manpowerA, manpowerB);
-    }
-
+    // - If levies > 200: slightly better odds (+1, capped at 6)
+    let manpower = d6();
     const manpowerMin = (levies >= 200) ? 3 : 1;
+    if (levies > 200) manpower = Math.min(6, manpower + 1);
     if (manpower < manpowerMin) manpower = manpowerMin;
 
     // Roll 3: Surprise (pure random)
@@ -140,15 +199,11 @@ function wireSkirmish(state) {
     const product = training * manpower * surprise;
     const success = product >= threat;
 
-    const manpowerDetail = (manpowerB === null)
-      ? `${manpowerA}`
-      : `${manpowerA} & ${manpowerB} → <b>${manpower}</b>`;
-
     renderResult(`
       <div><b>Faction:</b> ${escapeHtml(p.name ?? factionKey)} <span style="opacity:.8">(Gold ${gold}, Levies ${levies})</span></div>
       <div style="margin-top:6px">
         <b>Training</b>: ${training} <span style="opacity:.8">(min ${trainingMin} because Gold ${gold > 1000 ? ">" : "≤"} 1000)</span><br>
-        <b>Manpower</b>: ${manpowerDetail} <span style="opacity:.8">(${levies >= 200 ? "min 3" : "min 1"}${levies > 200 ? ", advantage" : ""})</span><br>
+        <b>Manpower</b>: ${manpower} <span style="opacity:.8">(min ${levies >= 200 ? "3" : "1"}${levies > 200 ? ", +1 advantage" : ""})</span><br>
         <b>Surprise</b>: ${surprise} <span style="opacity:.8">(random)</span>
       </div>
       <div style="margin-top:8px">
@@ -163,7 +218,6 @@ function wireSkirmish(state) {
 }
 
 /* ---------------- INIT ---------------- */
-
 setStatus("loading state.json…");
 setTurn("?");
 
@@ -176,7 +230,7 @@ fetch("state.json", { cache: "no-store" })
     setTurn(state.turn ?? "?");
     setStatus("state loaded ✓");
 
-    // ---- Players panel ----
+    // Players panel
     const playersDiv = document.getElementById("players");
     if (!playersDiv) throw new Error("Missing #players in index.html");
     playersDiv.innerHTML = "";
@@ -200,17 +254,18 @@ fetch("state.json", { cache: "no-store" })
       playersDiv.appendChild(div);
     }
 
-    // ---- Map ----
-    if (typeof L === "undefined") {
-      throw new Error("Leaflet didn't load (L is undefined). Check Leaflet <script> in index.html.");
-    }
+    // Leaderboard
+    renderLeaderboard(state);
+
+    // Map
+    if (typeof L === "undefined") throw new Error("Leaflet not loaded (L undefined).");
 
     const w = Number(state.map?.width);
     const h = Number(state.map?.height);
     const img = state.map?.image;
 
-    if (!img) throw new Error("state.json missing map.image (e.g. 'map.jpg')");
-    if (!Number.isFinite(w) || !Number.isFinite(h)) throw new Error("state.json map.width/height must be numbers");
+    if (!img) throw new Error("state.map.image missing (e.g. map.jpg)");
+    if (!Number.isFinite(w) || !Number.isFinite(h)) throw new Error("state.map.width/height must be numbers");
 
     setStatus("initialising map…");
 
@@ -220,8 +275,6 @@ fetch("state.json", { cache: "no-store" })
       crs: L.CRS.Simple,
       minZoom: -2,
       maxZoom: 2,
-
-      // lock panning to image bounds
       maxBounds: bounds,
       maxBoundsViscosity: 1.0
     });
@@ -229,7 +282,7 @@ fetch("state.json", { cache: "no-store" })
     L.imageOverlay(img, bounds).addTo(map);
     map.fitBounds(bounds);
 
-    // Coordinate picker
+    // Coordinate picker (click map to get x/y)
     map.on("click", (e) => {
       const x = Math.round(e.latlng.lng);
       const y = Math.round(e.latlng.lat);
