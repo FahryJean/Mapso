@@ -8,6 +8,8 @@ function setTurn(value) {
   if (el) el.textContent = value;
 }
 
+map.removeControl(map.attributionControl);
+
 function escapeHtml(s) {
   return String(s)
     .replaceAll("&", "&amp;")
