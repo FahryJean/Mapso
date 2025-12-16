@@ -108,6 +108,14 @@
       "description": "Several of your subjects believe you extort them too much, and desire that you kindly reconsider the way you do things...",
       "x": 2046,
       "y": 1015
+    },
+      {
+      "id": "evt_Pirates",
+      "type": "Military",
+      "title": "Pirates",
+      "description": "This area is plauged by a band of lawless seafaring men, a shame...",
+      "x": 2958,
+      "y": 871
     }
   ],
 
