@@ -90,13 +90,19 @@
       "income": 150,
       "buildings": ["Fortified Keep (I)"]
     },
-
     "tribes_end": {
       "name": "Tribe's End",
       "owner": "flatland_tribes",
       "type": "City",
       "income": 100,
       "buildings": ["Urban Sprawl (II)"]
+    },
+   "hillcrest_orchards": {
+      "name": "Hillcrest Orchards",
+      "owner": "flatland_tribes",
+      "type": "Industry",
+      "income": 50,
+      "buildings": ["Orchards (I)"]
     }
   },
 
@@ -141,6 +147,7 @@
     { "id": "fahry_pass", "provinceId": "fahry_pass", "x": 1457, "y": 885 },
     { "id": "zbabs_hold", "provinceId": "zbabs_hold", "x": 2172, "y": 1440 },
 
-    { "id": "tribes_end", "provinceId": "tribes_end", "x": 3925, "y": 1083 }
+    { "id": "tribes_end", "provinceId": "tribes_end", "x": 3925, "y": 1083 },
+    { "id": "hillcrest_orchards", "provinceId": "hillcrest_orchards", "x": 4321, "y": 908 }
   ]
 }
