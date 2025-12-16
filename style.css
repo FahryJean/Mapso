@@ -226,3 +226,20 @@ body{
   border-top:1px solid rgba(0,0,0,0.25);
   line-height:1.35;
 }
+
+/* ---------------- LEAFLET FONT OVERRIDE ---------------- */
+
+/* Override Leaflet's default Helvetica font */
+.leaflet-container,
+.leaflet-popup-content,
+.leaflet-tooltip {
+  font-family: "IM Fell English", Georgia, serif !important;
+  color: #1f1a14;
+}
+
+/* Optional: make popup text slightly nicer */
+.leaflet-popup-content {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
