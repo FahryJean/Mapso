@@ -100,6 +100,17 @@
     }
   },
 
+    "events": [
+    {
+      "id": "evt_taxation_is_theft",
+      "type": "Administrative",
+      "title": "Taxation is Theft?",
+      "description": "Several of your subjects believe you extort them too much, and desire that you kindly reconsider the way you do things...",
+      "x": 2046,
+      "y": 1015
+    }
+  ],
+
   "markers": [
     { "id": "iron_pearl", "provinceId": "iron_pearl", "x": 3333, "y": 1165 },
    
