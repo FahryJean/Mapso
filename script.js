@@ -193,6 +193,41 @@ function wireSkirmish(state) {
   });
 }
 
+/* ---------------- EVENTS ---------------- */
+
+function addEventMarkers(map, state) {
+  const events = state.events || [];
+  if (!events.length) return;
+
+  // Reusable Leaflet icon: white circle + exclamation mark
+  function makeEventIcon(type) {
+    return L.divIcon({
+      className: "", // we style the inner HTML instead
+      html: `<div class="event-icon" data-type="${escapeHtml(type)}"><span>!</span></div>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 13]
+    });
+  }
+
+  for (const ev of events) {
+    const x = Number(ev.x);
+    const y = Number(ev.y);
+    if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+
+    const type = ev.type || "Administrative";
+    const title = ev.title || "Event";
+    const desc = ev.description || "";
+
+    L.marker([y, x], { icon: makeEventIcon(type), keyboard: false })
+      .addTo(map)
+      .bindPopup(`
+        <b>${escapeHtml(title)}</b><br>
+        <i>${escapeHtml(type)}</i><br><br>
+        ${escapeHtml(desc)}
+      `);
+  }
+}
+
 /* ---------------- MAP ---------------- */
 
 function initMap(state) {
