@@ -10,15 +10,9 @@
   --ink:#1f1a14;
 
   /* layout sizing */
-  --sideW: 340px;        /* left + right panel width */
+  --sideW: 340px;
   --gap: 14px;
   --pad: 14px;
-
-  /* if your header height changes, update this */
-  --headerH: 86px;
-
-  /* ONE SHARED HEIGHT for side panels + map */
-  --mainH: calc(100vh - var(--headerH) - (var(--pad) * 2));
 }
 
 /* ---------------- BASE ---------------- */
@@ -49,24 +43,40 @@ body{
   border-bottom:3px solid var(--woodBorder);
 }
 
-.title{ font-size:28px; font-weight:normal; letter-spacing:0.5px; }
-.subtitle{ font-size:14px; opacity:0.85; }
-.hint{ font-size:14px; opacity:0.85; }
-
-/* ---------------- LAYOUT ---------------- */
-/* 3 columns now: LEFT | MAP | RIGHT */
-.layout{
-  display:grid;
-  grid-template-columns: var(--sideW) 1fr var(--sideW);
-  grid-template-rows: auto auto;
-  gap: var(--gap);
-  padding: var(--pad);
-  align-items:start;
+.title{
+  font-size:28px;
+  font-weight:normal;
+  letter-spacing:0.5px;
 }
 
-/* ---------------- PANELS (WOOD) ---------------- */
-.panel,
-.bottompanel{
+.subtitle{
+  font-size:14px;
+  opacity:0.85;
+}
+
+.hint{
+  font-size:14px;
+  opacity:0.9;
+}
+
+/* ---------------- MAIN LAYOUT ---------------- */
+/* This is the layout you already had (don’t change) */
+.layout{
+  display:grid;
+  grid-template-columns: var(--sideW) 1fr;
+  grid-template-rows: 1fr auto;
+  gap: var(--gap);
+  padding: var(--pad);
+  align-items: stretch;
+}
+
+.sidepanel{
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+/* ---------------- PANEL (WOOD) ---------------- */
+.panel{
   background-color:var(--wood2);
   background-image:
     repeating-linear-gradient(
@@ -80,104 +90,83 @@ body{
   border:3px solid var(--woodBorder);
   border-radius:12px;
   padding:14px;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
-}
 
-.panel{
   overflow-y:auto;
-  height: var(--mainH);
 }
 
-.sidepanel{
-  grid-column:1;
-  grid-row:1;
-}
-
-.rightpanel{
-  grid-column:3;
-  grid-row:1;
-}
-
-.panel h2,
-.bottompanel h2{
-  margin-top:10px;
-  margin-bottom:6px;
+.panel h2{
+  margin:10px 0 6px;
   font-size:18px;
   border-bottom:1px solid rgba(0,0,0,0.3);
   padding-bottom:4px;
 }
 
-/* ---------------- PLAYER ENTRIES ---------------- */
-.player{
-  margin-bottom:18px;
-  padding-left:8px;
-}
-.player b{ font-size:17px; }
-
-/* ---------------- MAP WRAP (MIDDLE) ---------------- */
+/* ---------------- MAP WRAP ---------------- */
 .mapwrap{
-  grid-column:2;
-  grid-row:1;
-  height: var(--mainH);
+  grid-column: 2;
+  grid-row: 1;
 
-  background:#e6e0d2;
   border:3px solid var(--woodBorder);
   border-radius:12px;
   overflow:hidden;
 
-  box-shadow:
-    0 10px 25px rgba(0,0,0,0.25),
-    inset 0 0 0 1px rgba(255,255,255,0.25);
+  background:#f7f2e7;
+
+  /* shadow to make map “pop” */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
 #map{
   width:100%;
   height:100%;
-  background:transparent;
 }
 
-.leaflet-image-layer{
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.28));
-}
-
-/* ---------------- BOTTOM STACK (ONLY UNDER MAP) ---------------- */
+/* ---------------- BOTTOM STACK ---------------- */
 .bottomstack{
-  grid-column:2;
-  grid-row:2;
-
-  display:flex;
-  flex-direction:column;
-  gap: var(--gap);
+  grid-column: 2;
+  grid-row: 2;
 }
 
-/* ---------------- MOVES ---------------- */
+.bottompanel{
+  border:3px solid var(--woodBorder);
+  border-radius:12px;
+
+  background:#f7f2e7;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+
+  padding:14px;
+}
+
+/* Moves rows */
 .moves{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:12px;
   margin:8px 0;
 }
 
 .move-btn{
-  font-family:inherit;
-  padding:6px 10px;
-  border-radius:10px;
   border:2px solid var(--woodBorder);
-  background:#f7f2e7;
+  background:#fff;
+  border-radius:10px;
+  padding:8px 10px;
+  font-family: inherit;
   cursor:pointer;
 }
 
 .move-outcome{
-  min-height: 1.2em;
-  display:inline-block;
-  opacity: 1;
+  min-height: 20px;
 }
 
-/* ---------------- SKIRMISH ---------------- */
+/* Skirmish box */
+.skirmish-box{
+  margin-top: 8px;
+}
+
 .skirmish-grid{
   display:grid;
   grid-template-columns: 1fr 1fr auto;
-  gap: 10px 14px;
+  gap: 12px;
   align-items:end;
 }
 
@@ -185,31 +174,31 @@ body{
   display:flex;
   flex-direction:column;
   gap:6px;
-  font-size:16px;
+  font-size:14px;
 }
 
 .skirmish-grid input,
 .skirmish-grid select{
-  font-family:inherit;
-  padding:6px 10px;
-  border-radius:10px;
   border:2px solid var(--woodBorder);
-  background:#f7f2e7;
+  border-radius:10px;
+  padding:8px 10px;
+  font-family: inherit;
+  background:#fff;
 }
 
 #sk-roll{
-  font-family:inherit;
-  padding:8px 12px;
-  border-radius:10px;
   border:2px solid var(--woodBorder);
-  background:#f7f2e7;
+  background:#fff;
+  border-radius:10px;
+  padding:9px 12px;
   cursor:pointer;
+  font-family: inherit;
 }
 
 .tip{
   display:inline-flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   width:18px;
   height:18px;
   margin-left:6px;
@@ -228,18 +217,53 @@ body{
 }
 
 /* ---------------- LEAFLET FONT OVERRIDE ---------------- */
-
-/* Override Leaflet's default Helvetica font */
 .leaflet-container,
-.leaflet-popup-content,
-.leaflet-tooltip {
-  font-family: "IM Fell English", Georgia, serif !important;
-  color: #1f1a14;
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip,
+.leaflet-tooltip,
+.leaflet-control {
+  font-family: inherit !important;
 }
 
-/* Optional: make popup text slightly nicer */
-.leaflet-popup-content {
-  font-size: 15px;
-  line-height: 1.35;
+/* ---------------- LEADERBOARD ---------------- */
+.leaderboard{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:6px;
+}
+
+.lb-row{
+  padding:10px 10px;
+  border:1px solid rgba(0,0,0,0.25);
+  border-radius:10px;
+  background:rgba(255,255,255,0.22);
+}
+
+.lb-title{
+  font-size:17px;
+  letter-spacing:0.2px;
+}
+
+.lb-sub{
+  opacity:0.8;
+  font-size:13px;
+  line-height:1.25;
+  margin-top:2px;
+}
+
+.lb-holder{
+  margin-top:6px;
+  font-size:15px;
+  font-weight:700;
+}
+
+/* ---------------- SEPARATOR ---------------- */
+.sep{
+  border:none;
+  border-top:1px solid rgba(0,0,0,0.35);
+  margin:14px 0;
+}
+
 }
 
