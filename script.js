@@ -204,8 +204,8 @@ function addEventMarkers(map, state) {
     return L.divIcon({
       className: "", // we style the inner HTML instead
       html: `<div class="event-icon" data-type="${escapeHtml(type)}"><span>!</span></div>`,
-      iconSize: [26, 26],
-      iconAnchor: [13, 13]
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
     });
   }
 
