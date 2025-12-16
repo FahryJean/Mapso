@@ -261,6 +261,14 @@ body{
   line-height:1.35;
 }
 
+/* ---------------- LEAFLET THING (not sure if works tbh) ---------------- */
+
+.leaflet-control-attribution {
+  font-family: "IM Fell English", serif;
+  font-size: 11px;
+  opacity: 0.6;
+}
+
 /* ---------------- EVENT MARKERS ---------------- */
 .event-icon{
   width: 18px;
