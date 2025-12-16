@@ -261,3 +261,30 @@ body{
   line-height:1.35;
 }
 
+/* ---------------- EVENT MARKERS ---------------- */
+.event-icon{
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 2px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Make it feel “stamped” onto the map */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.event-icon span{
+  font-size: 18px;
+  line-height: 1;
+  font-weight: bold;
+  color: #000;
+  transform: translateY(-1px);
+}
+
+/* Optional: different ring colours per event type (nice visual cue) */
+.event-icon[data-type="Administrative"] { border-color: #000; }
+.event-icon[data-type="Military"]       { border-color: #7a1414; }
+.event-icon[data-type="Expedition"]     { border-color: #1a3d6d; }
