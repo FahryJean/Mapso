@@ -296,6 +296,9 @@ function initMap(state) {
     `);
   }
 
+    // Event markers (white circle with "!")
+  addEventMarkers(map, state);
+
   return map;
 }
 
