@@ -109,7 +109,7 @@
     "events": [
     {
       "id": "evt_taxation_is_theft",
-      "type": "Administrative",
+      "type": "Administrative (Level 50)",
       "title": "Taxation is Theft?",
       "description": "Several of your subjects believe you extort them too much, and desire that you kindly reconsider the way you do things...",
       "x": 2046,
@@ -117,7 +117,7 @@
     },
       {
       "id": "evt_Pirates",
-      "type": "Military",
+      "type": "Military (Level 90)",
       "title": "Pirates",
       "description": "This area is plauged by a band of pirates, surely somebody has to deal with them?",
       "x": 2958,
@@ -125,7 +125,7 @@
     },
       {
       "id": "evt_cavegoblins",
-      "type": "Military",
+      "type": "Military (Level 75)",
       "title": "Cave Goblin Infestation",
       "description": "A pack of mindless goblins have made their way into this area through the nearby hills and mountains, a military response is most appropriate.",
       "x": 2710,
