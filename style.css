@@ -286,5 +286,5 @@ body{
 
 /* Optional: different ring colours per event type (nice visual cue) */
 .event-icon[data-type="Administrative"] { border-color: #000; }
-.event-icon[data-type="Military"]       { border-color: #7a1414; }
-.event-icon[data-type="Expedition"]     { border-color: #1a3d6d; }
+.event-icon[data-type="Military"]       { border-color: #000; }
+.event-icon[data-type="Expedition"]     { border-color: #000; }
