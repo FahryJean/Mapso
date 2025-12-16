@@ -249,9 +249,6 @@ function initMap(state) {
     maxBounds: bounds,
     maxBoundsViscosity: 1.0
   });
-  
-// REMOVE "Leaflet" TEXT (keeps attribution legal)
-map.attributionControl.setPrefix(false);
 
   L.imageOverlay(img, bounds).addTo(map);
   map.fitBounds(bounds);
