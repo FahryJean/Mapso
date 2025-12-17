@@ -112,8 +112,8 @@ async function pickCapitalImage(provinceId) {
   const override = CAPITAL_IMAGES[provinceId];
   const candidates = [
     override,
-    `${provinceId}.jpg`,                    // iron_pearl.jpg
-    `${provinceId.replaceAll("_", "")}.jpg` // ironpearl.jpg
+    `${provinceId}.jpg`,                      // iron_pearl.jpg
+    `${provinceId.replaceAll("_", "")}.jpg`   // ironpearl.jpg
   ].filter(Boolean);
 
   for (const c of candidates) {
@@ -143,4 +143,59 @@ fetch("state.json", { cache: "no-store" })
     if (!prov) throw new Error(`Unknown province id: ${provinceId}`);
 
     const ownerKey = prov.owner;
-    const owner = state.players?.[o]()
+    const owner = state.players?.[ownerKey];
+
+    // Header title
+    const t = document.getElementById("cap-title");
+    if (t) t.textContent = prov.name ?? provinceId;
+
+    // Centre image
+    const imgEl = document.getElementById("cap-image");
+    const imgFile = await pickCapitalImage(provinceId);
+    if (imgEl) imgEl.src = imgFile;
+
+    const existing = prov.buildings || [];
+    const possible = [
+      "Blacksmith",
+      "Administrative Hall",
+      "Marketplace",
+      "Army Quarters",
+      "Armoursmith",
+      "Cathedral"
+    ];
+
+    // LEFT panel
+    const capInfo = document.getElementById("cap-info");
+    if (capInfo) {
+      capInfo.innerHTML = `
+        <div><b>${escapeHtml(prov.name ?? provinceId)}</b></div>
+        <div>Type: ${escapeHtml(prov.type ?? "—")}</div>
+        <div>Owner: ${escapeHtml(owner?.name || ownerKey || "Unclaimed")}</div>
+        <div>Income: ${escapeHtml(prov.income ?? 0)}</div>
+
+        <div style="margin-top:10px;"><b>Buildings</b></div>
+        <div style="margin-top:6px;">${escapeHtml(cityFlavourText(prov))}</div>
+
+        <div style="margin-top:10px;"><b>Existing Buildings</b></div>
+        ${renderBuildingList(existing)}
+      `;
+    }
+
+    // RIGHT panel
+    const capBuildings = document.getElementById("cap-buildings");
+    if (capBuildings) {
+      capBuildings.innerHTML = `
+        <div style="margin-bottom:6px;"><b>Built</b></div>
+        ${renderBuildingList(existing)}
+
+        <div style="margin:14px 0 6px;"><b>Possible Buildings</b></div>
+        ${renderBuildingList(possible)}
+      `;
+    }
+
+    setStatus("ready ✓");
+  })
+  .catch(err => {
+    console.error(err);
+    setStatus(`ERROR: ${err.message}`);
+  });
