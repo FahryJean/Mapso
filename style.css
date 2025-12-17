@@ -125,7 +125,7 @@ body{
   padding-left:8px;
 }
 
-/* NEW: Capital link style */
+/* Capital link style */
 .capital-link{
   margin-left: 6px;
   font-size: 13px;
@@ -170,7 +170,7 @@ body{
   background:transparent;
 }
 
-/* NEW: capital page map div */
+/* capital page map div */
 #cap-map{
   width:100%;
   height:100%;
@@ -306,3 +306,34 @@ body{
 .event-icon[data-type="Administrative"] { border-color: #000; }
 .event-icon[data-type="Military"]       { border-color: #000; }
 .event-icon[data-type="Expedition"]     { border-color: #000; }
+
+/* ---------------- CAPITAL BUILDING LIST (ICONS) ---------------- */
+.building-list{
+  margin-top: 6px;
+}
+
+.building-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:6px 6px;
+  border-radius:10px;
+  background: rgba(255,255,255,0.14);
+  border: 2px solid rgba(0,0,0,0.18);
+  margin-bottom: 10px; /* <- gives your “empty line” breathing room */
+}
+
+.building-icon{
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 8px;
+  border: 2px solid rgba(0,0,0,0.45);
+  background: rgba(255,255,255,0.35);
+  object-fit: cover;
+}
+
+.building-name{
+  font-size: 16px;
+  line-height: 1.15;
+}
