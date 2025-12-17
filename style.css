@@ -125,6 +125,17 @@ body{
   padding-left:8px;
 }
 
+/* NEW: Capital link style */
+.capital-link{
+  margin-left: 6px;
+  font-size: 13px;
+  text-decoration: underline;
+  color: rgba(0,0,0,0.85);
+}
+.capital-link:hover{
+  color: rgba(0,0,0,1);
+}
+
 /* ---------------- LEADERBOARD ---------------- */
 .leaderboard-item{
   margin:10px 0 12px;
@@ -154,6 +165,13 @@ body{
 }
 
 #map{
+  width:100%;
+  height:100%;
+  background:transparent;
+}
+
+/* NEW: capital page map div */
+#cap-map{
   width:100%;
   height:100%;
   background:transparent;
