@@ -296,7 +296,7 @@ function initMap(state) {
     `);
   }
 
-    // Event markers (white circle with "!")
+  // Event markers (white circle with "!")
   addEventMarkers(map, state);
 
   return map;
@@ -328,14 +328,19 @@ fetch("state.json", { cache: "no-store" })
       div.style.paddingLeft = "10px";
       div.style.marginBottom = "18px";
 
-      const capitalName = state.provinces?.[p.capital]?.name ?? p.capital ?? "-";
+      const capitalId = p.capital ?? "";
+      const capitalName = state.provinces?.[capitalId]?.name ?? capitalId ?? "-";
+      const capitalLink = capitalId
+        ? ` <a class="capital-link" href="capital.html?id=${encodeURIComponent(capitalId)}">(Go to Capital)</a>`
+        : "";
+
       const levies = p.levies ?? 0;
 
       div.innerHTML = `
         <b>${escapeHtml(p.name ?? key)}</b><br>
         Gold: ${escapeHtml(p.gold ?? 0)}<br>
         Levies/Patrols: ${escapeHtml(levies)}<br>
-        Capital: ${escapeHtml(capitalName)}
+        Capital: ${escapeHtml(capitalName)}${capitalLink}
       `;
       playersDiv.appendChild(div);
     }
