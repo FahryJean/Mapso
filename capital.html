@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Capital View</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css?v=23" />
+</head>
+
+<body>
+  <header class="header">
+    <div>
+      <div class="title">Capital View</div>
+      <div class="subtitle"><span id="cap-title">—</span></div>
+    </div>
+
+    <div class="hint">
+      Status: <span id="status">booting…</span>
+      &nbsp;|&nbsp;
+      <a href="index.html" class="capital-link">Return</a>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- LEFT PANEL -->
+    <section class="panel sidepanel">
+      <h2>General Info</h2>
+      <div id="cap-info" class="list">Loading…</div>
+    </section>
+
+    <!-- MAP -->
+    <section class="mapwrap">
+      <div id="cap-map"></div>
+    </section>
+
+    <!-- RIGHT PANEL -->
+    <section class="panel rightpanel">
+      <h2>Buildings</h2>
+      <div id="cap-buildings">Loading…</div>
+    </section>
+
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="capital.js?v=1"></script>
+</body>
+</html>
