@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin</title>
 
-  <link rel="stylesheet" href="style.css?v=60" />
-  <script type="module" src="admin.js?v=3"></script>
+  <link rel="stylesheet" href="style.css?v=61" />
+  <script type="module" src="admin.js?v=4"></script>
 </head>
 
 <body>
   <header class="header">
     <div>
       <div class="title">Admin</div>
-      <div class="subtitle">Lock / Publish Turns</div>
+      <div class="subtitle">Lock / Resolve / Publish</div>
     </div>
 
     <div class="hint">
@@ -23,6 +23,7 @@
 
   <main class="layout">
 
+    <!-- LEFT PANEL -->
     <section class="panel sidepanel">
       <h2>Admin Passcode</h2>
       <input id="adminPass" type="password"
@@ -41,16 +42,58 @@
 
       <h2 style="margin-top:18px;">Turn Status</h2>
       <div id="statusBox">Loading…</div>
+
+      <h2 style="margin-top:18px;">Resolution Progress</h2>
+      <div id="resProgress">—</div>
     </section>
 
+    <!-- CENTRE -->
     <section class="mapwrap" style="padding:14px; overflow:auto;">
       <h2 style="margin-top:0;">Submissions (Current Turn)</h2>
       <div id="subs">Enter admin passcode, then click Refresh.</div>
     </section>
 
+    <!-- RIGHT PANEL -->
     <section class="panel rightpanel">
-      <h2>Notes</h2>
-      <p>If anything fails, the error should show in the left panel (AdminOut).</p>
+      <h2>Resolve a Faction</h2>
+
+      <label>Faction</label><br>
+      <select id="resFaction"
+        style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);"></select>
+
+      <div style="margin-top:12px;">
+        <div style="font-weight:bold;">Event outcome</div>
+        <textarea id="resEvent" rows="4"
+          style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);"></textarea>
+      </div>
+
+      <div style="margin-top:12px;">
+        <div style="font-weight:bold;">Improvement outcome</div>
+        <select id="resImproveResult"
+          style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);">
+          <option value="">—</option>
+          <option value="success">Success</option>
+          <option value="fail">Fail</option>
+        </select>
+        <textarea id="resImproveNotes" rows="3" placeholder="Notes (optional)"
+          style="margin-top:8px; width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);"></textarea>
+      </div>
+
+      <div style="margin-top:12px;">
+        <div style="font-weight:bold;">Campaign outcome (MTW)</div>
+        <textarea id="resCampaign" rows="4"
+          placeholder="Example: Imperial Core vs Southport — IC won (MTW). Southport loses Iron Pearl Outpost."
+          style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);"></textarea>
+      </div>
+
+      <div style="margin-top:12px;">
+        <button id="saveResBtn" class="move-btn">Save Resolution</button>
+      </div>
+
+      <div id="resOut" style="margin-top:10px;"></div>
+
+      <h2 style="margin-top:18px;">Tip</h2>
+      <p>We are storing outcomes only. You still update <code>state.json</code> manually for now.</p>
     </section>
 
   </main>
