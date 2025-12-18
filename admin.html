@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin</title>
 
-  <link rel="stylesheet" href="style.css?v=50" />
-  <script type="module" src="admin.js?v=2"></script>
+  <link rel="stylesheet" href="style.css?v=60" />
+  <script type="module" src="admin.js?v=3"></script>
 </head>
 
 <body>
@@ -23,7 +23,6 @@
 
   <main class="layout">
 
-    <!-- LEFT PANEL -->
     <section class="panel sidepanel">
       <h2>Admin Passcode</h2>
       <input id="adminPass" type="password"
@@ -38,24 +37,20 @@
         <button id="publishBtn" class="move-btn" style="margin-left:8px;">Publish Next Turn</button>
       </div>
 
-      <div id="adminOut" style="margin-top:12px;"></div>
+      <div id="adminOut" style="margin-top:12px;">(waiting)</div>
 
       <h2 style="margin-top:18px;">Turn Status</h2>
       <div id="statusBox">Loading…</div>
     </section>
 
-    <!-- CENTRE -->
     <section class="mapwrap" style="padding:14px; overflow:auto;">
       <h2 style="margin-top:0;">Submissions (Current Turn)</h2>
       <div id="subs">Enter admin passcode, then click Refresh.</div>
     </section>
 
-    <!-- RIGHT PANEL -->
     <section class="panel rightpanel">
       <h2>Notes</h2>
-      <p><b>Lock Turn</b>: stops new submissions.</p>
-      <p><b>Publish Next Turn</b>: advances the turn and opens a new 7-day window.</p>
-      <p>Battle outcomes are still manual (MTW), but this page lets you track who submitted and what they chose.</p>
+      <p>If anything fails, the error should show in the left panel (AdminOut).</p>
     </section>
 
   </main>
