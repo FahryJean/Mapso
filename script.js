@@ -134,7 +134,7 @@ function renderLeaderboard(state) {
 
 // Paste the same values you used in player.js
 const SUPABASE_URL = "https://rvtaogqygqanshxpjrer.supabase.co";
-const SUPABASE_ANON_KEY = "PASTE_YOUR_sb_publishable_KEY_HERE";
+const SUPABASE_ANON_KEY = "sb_publishable_g2tgBXMQmNHj0UNSf5MGuA_whabxtE_";
 
 function getSupabaseClient() {
   // UMD build exposes window.supabase
