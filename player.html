@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Player Mode</title>
+
+  <link rel="stylesheet" href="style.css?v=40" />
+  <script src="player.js?v=1" defer></script>
+</head>
+
+<body>
+  <header class="header">
+    <div>
+      <div class="title">Player Mode</div>
+      <div class="subtitle">Submit your turn</div>
+    </div>
+
+    <div class="hint">
+      <a href="index.html" class="capital-link">Return</a>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- LEFT PANEL -->
+    <section class="panel sidepanel">
+      <h2>Turn Status</h2>
+      <div id="statusBox">Loading…</div>
+    </section>
+
+    <!-- CENTRE -->
+    <section class="mapwrap" style="padding:14px;">
+      <h2>Welcome</h2>
+      <p>
+        This page connects to the game database.
+      </p>
+      <p>
+        If you can see the current turn info on the left, the connection works.
+      </p>
+    </section>
+
+    <!-- RIGHT PANEL -->
+    <section class="panel rightpanel">
+      <h2>Info</h2>
+      <p>Login and submission UI will appear here next.</p>
+    </section>
+
+  </main>
+</body>
+</html>
