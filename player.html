@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Player Mode</title>
 
-  <link rel="stylesheet" href="style.css?v=40" />
+  <link rel="stylesheet" href="style.css?v=41" />
   <script type="module" src="player.js?v=2"></script>
 </head>
 
@@ -27,23 +27,93 @@
     <section class="panel sidepanel">
       <h2>Turn Status</h2>
       <div id="statusBox">Loading…</div>
+
+      <h2>Login</h2>
+      <label>Faction</label><br>
+      <select id="faction" style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);"></select><br><br>
+
+      <label>Passcode</label><br>
+      <input id="passcode" type="password"
+        style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);" />
+
+      <div style="margin-top:12px;">
+        <button id="submitBtn" class="move-btn">Submit / Update Turn</button>
+      </div>
+      <div id="out" style="margin-top:10px;"></div>
     </section>
 
     <!-- CENTRE -->
-    <section class="mapwrap" style="padding:14px;">
-      <h2>Welcome</h2>
-      <p>
-        This page connects to the game database.
-      </p>
-      <p>
-        If you can see the current turn info on the left, the connection works.
-      </p>
+    <section class="mapwrap" style="padding:14px; overflow:auto;">
+      <h2 style="margin-top:0;">Your 3 Turn Actions</h2>
+
+      <div class="leaderboard-item">
+        <b>1) Faction Event Response</b>
+        <div class="lb-sub">Respond to an event marker inside your borders.</div>
+        <div style="margin-top:8px;">
+          <label>Event ID</label><br>
+          <input id="event_id" type="text" placeholder="e.g. EV-12"
+            style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);" />
+        </div>
+        <div style="margin-top:8px;">
+          <label>Choice</label><br>
+          <select id="event_choice"
+            style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);">
+            <option value="">—</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="leaderboard-item">
+        <b>2) Improve a Settlement</b>
+        <div class="lb-sub">
+          Choose a settlement + building. If you also launch a campaign this turn, this has 50% success.
+          If you do NOT launch a campaign, this becomes 100% success.
+        </div>
+
+        <div style="margin-top:8px;">
+          <label>Settlement ID</label><br>
+          <input id="improve_settlement" type="text" placeholder="e.g. iron_pearl"
+            style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);" />
+        </div>
+
+        <div style="margin-top:8px;">
+          <label>Building</label><br>
+          <input id="improve_building" type="text" placeholder="e.g. Marketplace"
+            style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);" />
+        </div>
+      </div>
+
+      <div class="leaderboard-item">
+        <b>3) Offensive Campaign</b>
+        <div class="lb-sub">
+          Optional. If you pick a target, you’re declaring a 1v1 Medieval Total War duel for resolution.
+          Leaving this blank counts as “no campaign”.
+        </div>
+
+        <div style="margin-top:8px;">
+          <label>Target settlement ID (optional)</label><br>
+          <input id="campaign_target" type="text" placeholder="e.g. southport"
+            style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);" />
+        </div>
+
+        <div style="margin-top:8px;">
+          <label>Notes (optional)</label><br>
+          <input id="campaign_note" type="text" placeholder="e.g. MTW 1v1 duel, attacker chooses map"
+            style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);" />
+        </div>
+      </div>
     </section>
 
     <!-- RIGHT PANEL -->
     <section class="panel rightpanel">
-      <h2>Info</h2>
-      <p>Login and submission UI will appear here next.</p>
+      <h2>Checklist</h2>
+      <div id="checkBox">—</div>
+
+      <h2>Next</h2>
+      <p>Later we’ll auto-populate event IDs and settlement IDs from <code>state.json</code> so players can pick from dropdowns.</p>
     </section>
 
   </main>
