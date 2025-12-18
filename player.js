@@ -1,39 +1,141 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-// TODO: paste your values here in Step 5C
 const SUPABASE_URL = "https://rvtaogqygqanshxpjrer.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_g2tgBXMQmNHj0UNSf5MGuA_whabxtE_";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function $(id) {
-  return document.getElementById(id);
-}
+const FACTIONS = [
+  { id: "imperial_core", name: "Imperial Core" },
+  { id: "southport", name: "Southport" },
+  { id: "flatland_tribes", name: "Flatland Tribes" }
+];
+
+function $(id){ return document.getElementById(id); }
 
 function fmtTime(ts) {
-  try {
-    return new Date(ts).toUTCString();
-  } catch {
-    return String(ts);
+  try { return new Date(ts).toUTCString(); } catch { return String(ts); }
+}
+
+function loadFactions() {
+  const sel = $("faction");
+  sel.innerHTML = "";
+  for (const f of FACTIONS) {
+    const opt = document.createElement("option");
+    opt.value = f.id;
+    opt.textContent = f.name;
+    sel.appendChild(opt);
   }
 }
 
 async function loadTurnStatus() {
   const { data, error } = await supabase.rpc("turn_status");
-
   if (error) {
     $("statusBox").textContent = `ERROR: ${error.message}`;
     return;
   }
-
   $("statusBox").innerHTML = `
     <div><b>Turn:</b> ${data.turn_number}</div>
     <div><b>Phase:</b> ${data.phase}</div>
-    <div><b>Submissions:</b> ${data.submitted_count} / ${data.faction_count}</div>
+    <div><b>Faction submissions:</b> ${data.submitted_count} / ${data.faction_count}</div>
     <div><b>Closes:</b> ${fmtTime(data.closes_at)}</div>
   `;
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  loadTurnStatus();
+function buildPayload() {
+  const eventId = $("event_id").value.trim();
+  const eventChoice = $("event_choice").value.trim();
+
+  const improveSettlement = $("improve_settlement").value.trim();
+  const improveBuilding = $("improve_building").value.trim();
+
+  const campaignTarget = $("campaign_target").value.trim();
+  const campaignNote = $("campaign_note").value.trim();
+
+  const payload = {
+    event_response: eventId || eventChoice ? { event_id: eventId, choice: eventChoice } : null,
+    improvement: improveSettlement || improveBuilding ? { settlement_id: improveSettlement, building: improveBuilding } : null,
+    campaign: campaignTarget || campaignNote ? { target_settlement_id: campaignTarget, note: campaignNote } : null
+  };
+
+  return payload;
+}
+
+function validatePayload(payload) {
+  const errs = [];
+
+  // Require event response for now (your “1st action”)
+  if (!payload.event_response || !payload.event_response.event_id || !payload.event_response.choice) {
+    errs.push("Event response is required: fill Event ID + Choice.");
+  }
+
+  // Require improvement for now (your “2nd action”)
+  if (!payload.improvement || !payload.improvement.settlement_id || !payload.improvement.building) {
+    errs.push("Improvement is required: fill Settlement ID + Building.");
+  }
+
+  // Campaign is optional (your “3rd action”)
+  // If provided, require target id (note can be empty)
+  if (payload.campaign && !payload.campaign.target_settlement_id) {
+    errs.push("Campaign: if you type anything, please include a Target settlement ID.");
+  }
+
+  return errs;
+}
+
+function updateChecklist(payload) {
+  let done = 0;
+  if (payload.event_response && payload.event_response.event_id && payload.event_response.choice) done++;
+  if (payload.improvement && payload.improvement.settlement_id && payload.improvement.building) done++;
+  // campaign counts as “done” if empty too? your call — I’ll count it only if set
+  const campaignChosen = !!(payload.campaign && payload.campaign.target_settlement_id);
+  if (campaignChosen) done++;
+
+  const successChance = campaignChosen ? "50% (campaign chosen)" : "100% (no campaign)";
+  $("checkBox").innerHTML = `
+    <div><b>Completed actions:</b> ${done} / 3</div>
+    <div style="margin-top:8px;"><b>Improvement success chance:</b> ${successChance}</div>
+  `;
+}
+
+async function submitTurn() {
+  $("out").textContent = "";
+
+  const faction = $("faction").value;
+  const passcode = $("passcode").value;
+
+  const payload = buildPayload();
+  updateChecklist(payload);
+
+  const errs = validatePayload(payload);
+  if (errs.length) {
+    $("out").innerHTML = `<div style="color:#7a1f1f;"><b>Fix these:</b><br>${errs.map(e => `• ${e}`).join("<br>")}</div>`;
+    return;
+  }
+
+  const { error } = await supabase.rpc("submit_turn", {
+    p_faction_id: faction,
+    p_passcode: passcode,
+    p_payload: payload
+  });
+
+  if (error) {
+    $("out").textContent = `ERROR: ${error.message}`;
+  } else {
+    $("out").textContent = "Submitted ✓";
+    await loadTurnStatus();
+  }
+}
+
+window.addEventListener("DOMContentLoaded", async () => {
+  loadFactions();
+  await loadTurnStatus();
+
+  // live checklist updates
+  const ids = ["event_id","event_choice","improve_settlement","improve_building","campaign_target","campaign_note"];
+  for (const id of ids) $(id).addEventListener("input", () => updateChecklist(buildPayload()));
+  $("event_choice").addEventListener("change", () => updateChecklist(buildPayload()));
+
+  $("submitBtn").addEventListener("click", submitTurn);
+  updateChecklist(buildPayload());
 });
