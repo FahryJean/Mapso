@@ -47,7 +47,7 @@ async function loadTurnStatus() {
   return data;
 }
 
-function renderSubmissions(arr) {
+function renderSubmissions(arr, resolvedSet = new Set()) {
   if (!arr || arr.length === 0) return "<div>No submissions found.</div>";
 
   const byFaction = new Map();
@@ -67,9 +67,17 @@ function renderSubmissions(arr) {
     const hasCamp = !!(p.campaign && p.campaign.target_settlement_id);
     const impChance = hasCamp ? "50%" : "100%";
 
+    const isResolved = resolvedSet.has(factionId);
+    const badge = isResolved
+      ? `<span style="font-weight:bold;">✅ RESOLVED</span>`
+      : `<span style="font-weight:bold;">⏳ UNRESOLVED</span>`;
+
     html += `
       <div class="leaderboard-item">
-        <b>${escapeHtml(factionId)}</b>
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:baseline;">
+          <b>${escapeHtml(factionId)}</b>
+          ${badge}
+        </div>
         <div class="lb-sub">Updated: ${escapeHtml(latest.updated_at || latest.submitted_at || "")}</div>
 
         <div style="margin-top:10px;">
@@ -85,7 +93,7 @@ function renderSubmissions(arr) {
   return html;
 }
 
-async function loadSubmissions() {
+async function loadSubmissions(resolvedSet = new Set()) {
   say("Loading submissions…");
   const pass = $("adminPass").value;
 
@@ -96,7 +104,7 @@ async function loadSubmissions() {
     return null;
   }
 
-  $("subs").innerHTML = renderSubmissions(data);
+  $("subs").innerHTML = renderSubmissions(data, resolvedSet);
   say("Submissions loaded ✓");
   return data;
 }
@@ -189,13 +197,17 @@ async function refreshAll() {
   const status = await loadTurnStatus();
   if (!status) return;
 
-  const subs = await loadSubmissions();
   const resolutions = await loadResolutions();
+  const resolvedSet = new Set((resolutions || []).map(r => r.faction_id));
+
+  await loadSubmissions(resolvedSet);
+
   setResProgress(resolutions, status.submitted_count, status.faction_count);
 
   // Fill form for currently selected faction
   await fillResolutionFormFromSaved($("resFaction").value);
 }
+
 
 window.addEventListener("DOMContentLoaded", async () => {
   loadFactionSelect();
