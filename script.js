@@ -130,6 +130,91 @@ function renderLeaderboard(state) {
   `;
 }
 
+/* ---------------- TURN LOG (SUPABASE) ---------------- */
+
+// Paste the same values you used in player.js
+const SUPABASE_URL = "https://rvtaogqygqanshxpjrer.supabase.co";
+const SUPABASE_ANON_KEY = "PASTE_YOUR_sb_publishable_KEY_HERE";
+
+function getSupabaseClient() {
+  // UMD build exposes window.supabase
+  if (!window.supabase || !window.supabase.createClient) {
+    throw new Error("Supabase SDK not loaded. Did you include the CDN script tag?");
+  }
+  return window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
+
+function groupByTurn(rows) {
+  const map = new Map();
+  for (const r of rows) {
+    const t = r.turn_number;
+    if (!map.has(t)) map.set(t, []);
+    map.get(t).push(r);
+  }
+  return map;
+}
+
+function renderTurnLog(rows) {
+  const el = document.getElementById("turn-log");
+  if (!el) return;
+
+  if (!rows || rows.length === 0) {
+    el.innerHTML = `<div>No published history yet.</div>`;
+    return;
+  }
+
+  const byTurn = groupByTurn(rows);
+  const turns = Array.from(byTurn.keys()).sort((a,b) => b - a);
+
+  let html = "";
+  for (const turn of turns) {
+    const items = byTurn.get(turn) || [];
+    html += `
+      <div class="turnlog-turn">
+        <div class="turnlog-turn-title">
+          <b>Turn ${escapeHtml(turn)}</b>
+          <span class="lb-sub">${escapeHtml(items.length)} faction(s)</span>
+        </div>
+    `;
+
+    for (const it of items) {
+      const res = it.resolution || {};
+      html += `
+        <div class="turnlog-faction">
+          <b>${escapeHtml(it.faction_id)}</b>
+          ${res.event_outcome ? `<div class="turnlog-kv">🎭 <b>Event:</b> ${escapeHtml(res.event_outcome)}</div>` : ""}
+          ${res.improvement_result ? `<div class="turnlog-kv">🏗 <b>Improve:</b> ${escapeHtml(res.improvement_result)}${res.improvement_notes ? " — " + escapeHtml(res.improvement_notes) : ""}</div>` : ""}
+          ${res.campaign_outcome ? `<div class="turnlog-kv">⚔ <b>Campaign:</b> ${escapeHtml(res.campaign_outcome)}</div>` : ""}
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+  }
+
+  el.innerHTML = html;
+}
+
+async function loadTurnLog() {
+  const el = document.getElementById("turn-log");
+  if (el) el.textContent = "Loading…";
+
+  const sb = getSupabaseClient();
+  const { data, error } = await sb.rpc("public_turn_log", { p_limit_turns: 10 });
+
+  if (error) {
+    if (el) el.textContent = `ERROR: ${error.message}`;
+    return;
+  }
+
+  renderTurnLog(data);
+}
+
+function wireTurnLog() {
+  const btn = document.getElementById("log-refresh");
+  if (btn) btn.addEventListener("click", loadTurnLog);
+}
+
 /* ---------------- SKIRMISHES ---------------- */
 
 function d6() {
@@ -352,6 +437,9 @@ fetch("state.json", { cache: "no-store" })
     initMap(state);
     wireMoves();
     wireSkirmish(state);
+    wireTurnLog();
+    loadTurnLog();
+
 
     setStatus("ready ✓");
   })
