@@ -389,4 +389,11 @@ body{
   opacity: 0.95;
 }
 
+/* NAVIGATION BUTTONS */
+a.move-btn {
+  text-decoration: none;
+  display: block;
+}
+
+
 
