@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin</title>
+
+  <link rel="stylesheet" href="style.css?v=50" />
+  <script type="module" src="admin.js?v=1"></script>
+</head>
+
+<body>
+  <header class="header">
+    <div>
+      <div class="title">Admin</div>
+      <div class="subtitle">Lock / Publish Turns</div>
+    </div>
+
+    <div class="hint">
+      <a href="index.html" class="capital-link">Return</a>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <!-- LEFT PANEL -->
+    <section class="panel sidepanel">
+      <h2>Admin Passcode</h2>
+      <input id="adminPass" type="password"
+        style="width:100%; padding:8px; border-radius:10px; border:2px solid rgba(0,0,0,0.25);" />
+
+      <div style="margin-top:12px;">
+        <button id="refreshBtn" class="move-btn">Refresh</button>
+      </div>
+
+      <div style="margin-top:12px;">
+        <button id="lockBtn" class="move-btn">Lock Turn</button>
+        <button id="publishBtn" class="move-btn" style="margin-left:8px;">Publish Next Turn</button>
+      </div>
+
+      <div id="adminOut" style="margin-top:12px;"></div>
+
+      <h2 style="margin-top:18px;">Turn Status</h2>
+      <div id="statusBox">Loading…</div>
+    </section>
+
+    <!-- CENTRE -->
+    <section class="mapwrap" style="padding:14px; overflow:auto;">
+      <h2 style="margin-top:0;">Submissions (Current Turn)</h2>
+      <div id="subs">Enter admin passcode, then click Refresh.</div>
+    </section>
+
+    <!-- RIGHT PANEL -->
+    <section class="panel rightpanel">
+      <h2>Notes</h2>
+      <p><b>Lock Turn</b>: stops new submissions.</p>
+      <p><b>Publish Next Turn</b>: advances the turn and opens a new 7-day window.</p>
+      <p>Battle outcomes are still manual (MTW), but this page lets you track who submitted and what they chose.</p>
+    </section>
+
+  </main>
+</body>
+</html>
