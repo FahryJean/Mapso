@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Your styles (bump v= when you change style.css) -->
-  <link rel="stylesheet" href="style.css?v=28" />
+  <link rel="stylesheet" href="style.css?v=29" />
 </head>
 
 <body>
@@ -40,28 +40,32 @@
     </section>
 
     <!-- RIGHT PANEL -->
-    <section class="panel rightpanel">
-      <h2>Moves</h2>
+   <section class="panel sidepanel">
+  <h2>Navigation</h2>
 
-      <div class="moves">
-        <button class="move-btn" data-move="1">Improve Settlement</button>
-        <span class="move-outcome" id="move-outcome-1"></span>
-      </div>
+  <!-- NAVIGATION BUTTONS -->
+  <div style="display:flex; flex-direction:column; gap:10px;">
+    <a href="player.html" class="move-btn" style="text-align:center;">
+      🧭 Player Turn Submission
+    </a>
 
-      <div class="moves">
-        <button class="move-btn" data-move="2">Arrange Expedition</button>
-        <span class="move-outcome" id="move-outcome-2"></span>
-      </div>
+    <a href="admin.html" class="move-btn" style="text-align:center;">
+      🛡 Admin Panel
+    </a>
+  </div>
 
-      <div class="moves">
-        <button class="move-btn" data-move="3">Plan Offensive Campaign</button>
-        <span class="move-outcome" id="move-outcome-3"></span>
-      </div>
+  <!-- MOVES (DISABLED FOR NOW) -->
+  <div id="moves-disabled" style="display:none; margin-top:14px;">
+    <button class="move-btn">Improve Settlement</button>
+    <button class="move-btn">Declare Campaign</button>
+    <button class="move-btn">Respond to Event</button>
+  </div>
 
-      <h2>Notes</h2>
-      <p>Edit <code>state.json</code> each turn, then commit.</p>
-      <p><b>If it fails:</b> the error will appear in the Status line.</p>
-    </section>
+  <div class="lb-sub" style="margin-top:14px;">
+    Turn actions are currently submitted via <b>Player Mode</b>.
+  </div>
+</section>
+
 
     <!-- BOTTOM (SKIRMISHES) -->
   <!-- BOTTOM (TURN LOG) -->
