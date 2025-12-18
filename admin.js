@@ -83,18 +83,18 @@ async function loadSubmissions() {
   const status = await loadTurnStatus();
   if (!status) return;
 
-  // Try direct select (works only if RLS/policies allow)
-  const { data, error } = await supabase
-    .from("turn_submissions")
-    .select("turn_number,faction_id,payload,submitted_at,updated_at")
-    .eq("turn_number", status.turn_number)
-    .order("updated_at", { ascending: false });
+  const pass = $("adminPass").value;
+
+  const { data, error } = await supabase.rpc("admin_list_submissions", { p_passcode: pass });
 
   if (error) {
-    $("subs").innerHTML = `<div><b>ERROR loading submissions:</b> ${escapeHtml(error.message)}</div>
-    <div style="margin-top:8px;">If this persists, I’ll give you a small admin RPC to list submissions securely.</div>`;
+    $("subs").innerHTML = `<div><b>ERROR:</b> ${escapeHtml(error.message)}</div>`;
     return;
   }
+
+  $("subs").innerHTML = renderSubmissions(data);
+}
+
 
   $("subs").innerHTML = renderSubmissions(data);
 }
