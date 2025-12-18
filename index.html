@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Your styles (bump v= when you change style.css) -->
-  <link rel="stylesheet" href="style.css?v=24" />
+  <link rel="stylesheet" href="style.css?v=28" />
 </head>
 
 <body>
@@ -64,35 +64,24 @@
     </section>
 
     <!-- BOTTOM (SKIRMISHES) -->
-    <section class="panel bottomstack">
-      <div class="bottompanel">
-        <h2>Skirmishes</h2>
+  <!-- BOTTOM (TURN LOG) -->
+<section class="panel bottomstack">
+  <div class="bottompanel">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px;">
+      <h2 style="margin:0;">Turn Log</h2>
+      <button id="log-refresh" class="move-btn">Refresh Log</button>
+    </div>
 
-        <div class="skirmish-grid">
-          <div class="sk-field">
-            <label for="sk-faction">Faction</label>
-            <select id="sk-faction"></select>
-          </div>
+    <div class="lb-sub" style="margin-top:6px;">
+      Shows resolved outcomes for <b>past</b> turns only (after you publish).
+    </div>
 
-          <div class="sk-field">
-            <label for="sk-threat">Threat difficulty</label>
-            <input id="sk-threat" type="number" min="1" value="-" />
-          </div>
+    <div id="turn-log" class="turnlog">
+      Loading…
+    </div>
+  </div>
+</section>
 
-          <div class="sk-field sk-actions">
-            <button id="sk-roll">Roll skirmish</button>
-          </div>
-        </div>
-
-        <div class="sk-help">
-          <span class="tip" title="Training = troop experience. If gold &gt; 1000, minimum roll is 3.">Training</span>
-          <span class="tip" title="Manpower = ability to sustain losses. If levies ≥ 200, minimum roll is 3.">Manpower</span>
-          <span class="tip" title="Surprise = random factor, always a straight d6.">Surprise</span>
-        </div>
-
-        <div class="skirmish-results" id="sk-results"></div>
-      </div>
-    </section>
 
   </main>
 
