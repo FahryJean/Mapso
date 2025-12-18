@@ -5,11 +5,32 @@ const SUPABASE_ANON_KEY = "sb_publishable_g2tgBXMQmNHj0UNSf5MGuA_whabxtE_";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const FACTIONS = [
-  { id: "imperial_core", name: "Imperial Core" },
-  { id: "southport", name: "Southport" },
-  { id: "flatland_tribes", name: "Flatland Tribes" }
+const FALLBACK_FACTIONS = [
+  { id: "imperial_core", display_name: "Imperial Core" },
+  { id: "southport", display_name: "Southport" },
+  { id: "flatland_tribes", display_name: "Flatland Tribes" }
 ];
+
+let FACTIONS = [];
+let FACTIONS_BY_ID = new Map();
+
+async function loadFactions() {
+  const { data, error } = await supabase
+    .from("factions")
+    .select("id, display_name")
+    .order("display_name", { ascending: true });
+
+  const factions = (!error && Array.isArray(data) && data.length) ? data : FALLBACK_FACTIONS;
+  if (error) console.warn("Failed to load factions from DB, using fallback list:", error);
+
+  FACTIONS = factions.map(f => ({
+    id: f.id,
+    display_name: f.display_name || f.id
+  }));
+
+  FACTIONS_BY_ID = new Map(FACTIONS.map(f => [f.id, f.display_name]));
+}
+
 
 function $(id){ return document.getElementById(id); }
 
@@ -75,7 +96,7 @@ function renderSubmissions(arr, resolvedSet = new Set()) {
     html += `
       <div class="leaderboard-item">
         <div style="display:flex; justify-content:space-between; gap:10px; align-items:baseline;">
-          <b>${escapeHtml(factionId)}</b>
+          <b>${escapeHtml(FACTIONS_BY_ID.get(factionId) || factionId)}</b><span style="opacity:0.75; margin-left:6px;">(${escapeHtml(factionId)})</span>
           ${badge}
         </div>
         <div class="lb-sub">Updated: ${escapeHtml(latest.updated_at || latest.submitted_at || "")}</div>
@@ -122,7 +143,7 @@ function loadFactionSelect() {
   for (const f of FACTIONS) {
     const opt = document.createElement("option");
     opt.value = f.id;
-    opt.textContent = f.name;
+    opt.textContent = f.display_name || f.id;
     sel.appendChild(opt);
   }
 }
@@ -210,6 +231,7 @@ async function refreshAll() {
 
 
 window.addEventListener("DOMContentLoaded", async () => {
+  await loadFactions();
   loadFactionSelect();
 
   $("refreshBtn").addEventListener("click", refreshAll);
