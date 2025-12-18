@@ -154,7 +154,7 @@ function groupByTurn(rows) {
   return map;
 }
 
-function renderTurnLog(rows) {
+function renderTurnLog(rows, nameMap) {
   const el = document.getElementById("turn-log");
   if (!el) return;
 
@@ -179,9 +179,11 @@ function renderTurnLog(rows) {
 
     for (const it of items) {
       const res = it.resolution || {};
+      const display = nameMap.get(it.faction_id) || it.faction_id;
+
       html += `
         <div class="turnlog-faction">
-          <b>${escapeHtml(it.faction_id)}</b>
+          <b>${escapeHtml(display)}</b>
           ${res.event_outcome ? `<div class="turnlog-kv">🎭 <b>Event:</b> ${escapeHtml(res.event_outcome)}</div>` : ""}
           ${res.improvement_result ? `<div class="turnlog-kv">🏗 <b>Improve:</b> ${escapeHtml(res.improvement_result)}${res.improvement_notes ? " — " + escapeHtml(res.improvement_notes) : ""}</div>` : ""}
           ${res.campaign_outcome ? `<div class="turnlog-kv">⚔ <b>Campaign:</b> ${escapeHtml(res.campaign_outcome)}</div>` : ""}
@@ -200,14 +202,23 @@ async function loadTurnLog() {
   if (el) el.textContent = "Loading…";
 
   const sb = getSupabaseClient();
-  const { data, error } = await sb.rpc("public_turn_log", { p_limit_turns: 10 });
 
-  if (error) {
-    if (el) el.textContent = `ERROR: ${error.message}`;
+  // 1) Get faction display names
+  const fac = await sb.rpc("public_factions");
+  if (fac.error) {
+    if (el) el.textContent = `ERROR: ${fac.error.message}`;
+    return;
+  }
+  const nameMap = new Map((fac.data || []).map(f => [f.id, f.display_name]));
+
+  // 2) Get published turn log
+  const log = await sb.rpc("public_turn_log", { p_limit_turns: 10 });
+  if (log.error) {
+    if (el) el.textContent = `ERROR: ${log.error.message}`;
     return;
   }
 
-  renderTurnLog(data);
+  renderTurnLog(log.data, nameMap);
 }
 
 function wireTurnLog() {
