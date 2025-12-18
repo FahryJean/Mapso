@@ -5,10 +5,11 @@ const SUPABASE_ANON_KEY = "sb_publishable_g2tgBXMQmNHj0UNSf5MGuA_whabxtE_";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const FACTIONS = [
-  { id: "imperial_core", name: "Imperial Core" },
-  { id: "southport", name: "Southport" },
-  { id: "flatland_tribes", name: "Flatland Tribes" }
+// DB-driven factions. Fallback only if DB read fails.
+const FALLBACK_FACTIONS = [
+  { id: "imperial_core", display_name: "Imperial Core" },
+  { id: "southport", display_name: "Southport" },
+  { id: "flatland_tribes", display_name: "Flatland Tribes" }
 ];
 
 function $(id){ return document.getElementById(id); }
@@ -17,13 +18,25 @@ function fmtTime(ts) {
   try { return new Date(ts).toUTCString(); } catch { return String(ts); }
 }
 
-function loadFactions() {
+async function loadFactions() {
   const sel = $("faction");
   sel.innerHTML = "";
-  for (const f of FACTIONS) {
+
+  const { data, error } = await supabase
+    .from("factions")
+    .select("id, display_name")
+    .order("display_name", { ascending: true });
+
+  const factions = (!error && Array.isArray(data) && data.length)
+    ? data
+    : FALLBACK_FACTIONS;
+
+  if (error) console.warn("Failed to load factions from DB, using fallback:", error);
+
+  for (const f of factions) {
     const opt = document.createElement("option");
     opt.value = f.id;
-    opt.textContent = f.name;
+    opt.textContent = f.display_name || f.id;
     sel.appendChild(opt);
   }
 }
@@ -52,34 +65,24 @@ function buildPayload() {
   const campaignTarget = $("campaign_target").value.trim();
   const campaignNote = $("campaign_note").value.trim();
 
-  const payload = {
+  return {
     event_response: eventId || eventChoice ? { event_id: eventId, choice: eventChoice } : null,
     improvement: improveSettlement || improveBuilding ? { settlement_id: improveSettlement, building: improveBuilding } : null,
     campaign: campaignTarget || campaignNote ? { target_settlement_id: campaignTarget, note: campaignNote } : null
   };
-
-  return payload;
 }
 
 function validatePayload(payload) {
   const errs = [];
-
-  // Require event response for now (your “1st action”)
   if (!payload.event_response || !payload.event_response.event_id || !payload.event_response.choice) {
     errs.push("Event response is required: fill Event ID + Choice.");
   }
-
-  // Require improvement for now (your “2nd action”)
   if (!payload.improvement || !payload.improvement.settlement_id || !payload.improvement.building) {
     errs.push("Improvement is required: fill Settlement ID + Building.");
   }
-
-  // Campaign is optional (your “3rd action”)
-  // If provided, require target id (note can be empty)
   if (payload.campaign && !payload.campaign.target_settlement_id) {
     errs.push("Campaign: if you type anything, please include a Target settlement ID.");
   }
-
   return errs;
 }
 
@@ -87,7 +90,6 @@ function updateChecklist(payload) {
   let done = 0;
   if (payload.event_response && payload.event_response.event_id && payload.event_response.choice) done++;
   if (payload.improvement && payload.improvement.settlement_id && payload.improvement.building) done++;
-  // campaign counts as “done” if empty too? your call — I’ll count it only if set
   const campaignChosen = !!(payload.campaign && payload.campaign.target_settlement_id);
   if (campaignChosen) done++;
 
@@ -128,10 +130,9 @@ async function submitTurn() {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
-  loadFactions();
+  await loadFactions();
   await loadTurnStatus();
 
-  // live checklist updates
   const ids = ["event_id","event_choice","improve_settlement","improve_building","campaign_target","campaign_note"];
   for (const id of ids) $(id).addEventListener("input", () => updateChecklist(buildPayload()));
   $("event_choice").addEventListener("change", () => updateChecklist(buildPayload()));
