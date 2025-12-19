@@ -226,13 +226,18 @@ async function initPlayerMap() {
     const name = prov.name || provId || m.id;
 
     const cm = L.circleMarker([y, x], {
-      radius: 7,
-      weight: 1
+      radius: 4,
+      color: "#000",
+      weight: 1,
+      fillColor: "#ffffff",
+      fillOpacity: 0.9
     }).addTo(map);
 
     cm.bindTooltip(name, { direction: "top", offset: [0, -6] });
 
-    cm.on("click", () => {
+    cm.on("click", (e) => {
+      // Prevent the map's click handler from clearing selection immediately.
+      if (e) L.DomEvent.stopPropagation(e);
       setSelected({ kind: "settlement", id: provId, name });
     });
   }
@@ -248,13 +253,17 @@ async function initPlayerMap() {
     const name = ev.title || id;
 
     const em = L.circleMarker([y, x], {
-      radius: 9,
-      weight: 2
+      radius: 5,
+      color: "#000",
+      weight: 1,
+      fillColor: "#ffd37a",
+      fillOpacity: 0.95
     }).addTo(map);
 
     em.bindTooltip(`EVENT: ${name}`, { direction: "top", offset: [0, -8] });
 
-    em.on("click", () => {
+    em.on("click", (e) => {
+      if (e) L.DomEvent.stopPropagation(e);
       setSelected({ kind: "event", id, name });
     });
   }
