@@ -80,11 +80,16 @@
       opacity: 0.45;
       cursor: not-allowed;
     }
+    .hintline{
+      margin: 8px 2px 0;
+      font-size: 12px;
+      opacity: 0.8;
+    }
     /* make side panels scroll if needed */
     .sidepanel, .rightpanel { overflow: auto; }
   </style>
 
-  <script type="module" src="player.js?v=3"></script>
+  <script type="module" src="player.js?v=4"></script>
 </head>
 
 <body>
@@ -135,6 +140,7 @@
 
           <button id="btnClearSel" class="shortcut-btn" disabled style="margin-left:auto;">CLEAR</button>
         </div>
+        <div class="hintline">Tip: click a settlement/event on the map, then use the buttons above to auto-fill the form fields.</div>
 
         <h2 style="margin-top:0;">Your 3 Turn Actions</h2>
 
